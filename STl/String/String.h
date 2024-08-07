@@ -7,6 +7,9 @@ class String
 {
 public:
 	static const size_t nops = -1;
+	typedef char* iterator;
+	iterator begain();
+	iterator end();
 	String();//Constructs an empty string, with a length of zero characters.
 	String(const char* str );//Copies the null-terminated character sequence (C-string) pointed by s.
 	String(size_t n , char c);//Fills the string with n consecutive copies of character c.
@@ -20,9 +23,13 @@ public:
 	void reserve(size_t n);
 	void clear();
 	bool empty();
-	String& operator[](size_t pos);
+	char& operator[](size_t pos);
+	void swap(String& str);
+	String& operator+=(const char* str);
+	const char* c_str()const;
+	size_t find(const char* str, size_t nps = 0);
 	friend ostream& operator<<(ostream& out, String& s);
-
+	friend istream& operator>>(istream& in, String& s);
 
 
 private:
