@@ -1,0 +1,67 @@
+#include<string>
+#include<iostream>
+using namespace std;
+class Solution {
+public:
+    string test(string s) {
+        size_t l = 0;
+        size_t r = s.size() - 1;
+        while (l < r)
+        {
+            if (isletter(&s[l]))
+            {
+                if (isletter(&s[l]))
+                {
+                    swap(s[l],s[r]);
+                    ++l;
+                    --r;
+                }
+                else
+                    --r;
+            }
+            else
+                ++l;
+        }
+        return s;
+    }
+    bool isletter(char* it)
+    {
+        return  (*it >= 'a' && *it <= 'z' || *it >= 'A' && *it <= 'Z');
+    }
+
+};
+class Solution1 {
+public:
+    int firstUniqChar(string s) {
+        int r = s.size() - 1;
+        int i = 0;
+        while (i < r)
+        {
+            if (s.find(s[i]) == s.npos)
+            {
+                return i;
+            }
+            else
+                ++i;
+        }
+        return -1;
+    }
+};
+void test1()
+{
+    string s1("a-bC-dEf-ghIj");
+    Solution S;
+    s1 = S.test(s1);
+    cout << s1;
+}
+void test2()
+{
+    string s("leetcode");
+    Solution1 S;
+    cout << S.firstUniqChar(s);
+}
+int main()
+{
+    test2();
+    return 0;
+}
