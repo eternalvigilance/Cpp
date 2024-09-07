@@ -1,0 +1,359 @@
+//#include<string>
+//using std::string;
+//class Solution {
+//public:
+//    bool isPalindrome(string s) {
+//
+//        size_t i = 0;
+//        std::string::iterator it = s.begin();
+//        std::string::iterator end = s.end();
+//        for (auto v : s)
+//        { 
+//            if (*it >= '0' && *it <= '9' ||
+//                *it >= 'A' && *it <= 'Z' ||
+//                *it >= 'a' && *it <= 'z')
+//            {
+//                if (*it >= 'a' && *it <= 'z')
+//                {
+//                     *it = *it - 32;
+//                }
+//                ++it;
+//             }
+//            else
+//                s.erase(it);
+//
+//        }
+//        it = s.begin();
+//        end = s.end();
+//        string s1(s);
+//        while (it != end)
+//        {
+//            s1[i] = *(end - 1);
+//            ++i;
+//            --end;
+//        }
+//        if (s.compare(s1))
+//        {
+//            return false;
+//        }
+//        else
+//            return true;
+//    }
+//};
+//void test(Solution& s1, string& s)
+//{
+//    s1.isPalindrome(s);
+//}
+//#include<iostream>
+//void test1()
+//{
+//    char b = 'A'+ 32;
+//    std::cout << b << std::endl;
+//}
+//int main()
+//{ 
+//    string s("A man, a plan, a canal: Panama");
+//    Solution s1;
+//    test(s1,s);
+//    test1();
+//    return 0;
+//}
+// --------------------------------------------------------------------------------------------------
+//#include<string>
+//using std::string;
+//class Solution {
+//public:
+//    bool isPalindrome(string s) {
+//        size_t i = 0;
+//        size_t r = s.size();
+//        for(i = 0;i < r;i++)
+//        {
+//            if (s[i] >= '0' && s[i] <= '9' ||
+//                s[i] >= 'A' && s[i] <= 'Z' ||
+//                s[i] >= 'a' && s[i] <= 'z')
+//            {
+//                if (s[i] >= 'a' && s[i] <= 'z')
+//                {
+//                    s[i] = s[i] - 32;
+//                }
+//            }
+//            else
+//            {
+//                s.erase(i,1);
+//                --i;
+//
+//            }
+//
+//        }
+//        i = 0;
+//        r = s.size() - 1;
+//        string s1(s);
+//        while (i < r)
+//        {
+//            s1[i] = s[r];
+//            ++i;
+//            --r;
+//        }
+//        if (s.compare(s1))
+//        {
+//            return false;
+//        }
+//        else
+//            return true;
+//    }
+//};
+//void test(Solution& s1, string& s)
+//{
+//    s1.isPalindrome(s);
+//}
+//#include<iostream>
+//void test1()
+//{
+//    char b = 'A' + 32;
+//    std::cout << b << std::endl;
+//}
+//int main()
+//
+//{
+//    string s("A man, a plan, a canal: Panama");
+//    Solution s1;
+//    test(s1, s);
+//    test1();
+//    return 0;
+//}
+//---------------------------------------------------------------------------------
+//#include<string>
+//using std::string;
+//class Solution 
+//{
+//public:
+//    bool isPalindrome(string s)
+//    {
+//        size_t i = 0;
+//        size_t r = s.size();
+//        for (i = 0; i < r; i++)
+//        {
+//            if (s[i] >= '0' && s[i] <= '9' ||
+//                s[i] >= 'A' && s[i] <= 'Z' ||
+//                s[i] >= 'a' && s[i] <= 'z')
+//            {
+//                if (s[i] >= 'a' && s[i] <= 'z')
+//                {
+//                    s[i] = s[i] - 32;
+//                }
+//            }
+//            else
+//            {
+//                s.erase(i, 1);
+//                --i;
+//                --r;
+//            }
+//
+//        }
+//        r = s.size();
+//        string s1 = s.substr(0, r / 2);
+//        if (s.rfind(s1) != string::npos)//this version is defective
+//        {
+//            return true;
+//        }
+//        else
+//            return false;
+//    }
+//};
+//void test(Solution& s1, string& s)
+//{
+//    s1.isPalindrome(s);
+//}
+//#include<iostream>
+//void test1()
+//{
+//    char b = 'A' + 32;
+//    std::cout << b << std::endl;
+//}
+//int main()
+//
+//{
+//    string s("raceacar");
+//    Solution s1;
+//    test(s1, s);
+//    test1();
+//    return 0;
+//}
+// -------------------------------
+//#include<string>
+//#include<algorithm>
+//using std::string;
+//class Solution
+//{
+//public:
+//    bool isPalindrome(string s)
+//    {
+//        size_t i = 0;
+//        size_t r = s.size();
+//        for (i = 0; i < r; i++)
+//        {
+//            if (s[i] >= '0' && s[i] <= '9' ||
+//                s[i] >= 'A' && s[i] <= 'Z' ||
+//                s[i] >= 'a' && s[i] <= 'z')
+//            {
+//                if (s[i] >= 'a' && s[i] <= 'z')
+//                {
+//                    s[i] = s[i] - 32;
+//                }
+//            }
+//            else
+//            {
+//                s.erase(i, 1);
+//                --i;
+//                --r;
+//            }
+//
+//        }
+//
+//        r = s.size();
+//        string s1(s);
+//        string::iterator it = s1.begin();
+//        string::iterator end = s1.end();
+//
+//        std::reverse(it,end);
+//        if (s.compare(s1))
+//        {
+//            return false;
+//        }
+//        else
+//            return true;
+//    }
+//};
+//#include<iostream>
+//void test(Solution& s1, string& s)
+//{
+//    std::cout << s1.isPalindrome(s);
+//}
+//
+//void test1()
+//{
+//    char b = 'A' + 32;
+//    std::cout << b << std::endl;
+//}
+//int main()
+//
+//{
+//    string s("raceacar");
+//    Solution s1;
+//    test(s1, s);
+//    test1();
+//    return 0;
+//}
+// --------------------------------------------
+//#include<string>
+//#include<algorithm>
+//using std::string;
+//class Solution
+//{
+//public:
+//    bool isPalindrome(string s)
+//    {
+//        size_t i = 0;
+//        size_t r = s.size();
+//        for (i = 0; i < r; i++)
+//        {
+//            if (isAlphanumeric(s[i]))
+//            {
+//                if (s[i] >= 'a' && s[i] <= 'z')
+//                {
+//                    s[i] = s[i] - 32;
+//                }
+//            }
+//            else
+//            {
+//                s.erase(i, 1);
+//                --i;
+//                --r;
+//            }
+//
+//        }
+//
+//        r = s.size();
+//        string s1(s);
+//        reverse(s,r-1);
+//        if (s.compare(s1))
+//        {
+//            return false;
+//        }
+//        else
+//            return true;
+//    }
+//    bool isAlphanumeric(char& i)
+//    {
+//        return(i >= '0' && i <= '9' ||
+//            i >= 'A' && i <= 'Z' ||
+//            i >= 'a' && i <= 'z');
+//    }
+//    void reverse(string& s, size_t r)
+//    {
+//        for (size_t i = 0; i < r; i++)
+//        {
+//            char tmp = s[i];
+//            s[i] = s[r];
+//            s[r] = tmp;
+//            --r;
+//        }
+//
+//    }
+//};
+//#include<iostream>
+//void test(Solution& s1, string& s)
+//{
+//    std::cout << s1.isPalindrome(s);
+//}
+//int main()
+//
+//{
+//    string s("abccba");
+//    Solution s1;
+//    test(s1, s);
+//    return 0;
+//}
+#include<string>
+using std::string;
+class Solution {
+public:
+    bool isPalindrome(string s) {
+        int n = s.length();
+        if (n == 1)return true;
+        int l = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            if (s[i] >= 'A' && s[i] <= 'Z')
+            {
+                char c = s[i] + 32;
+                std::swap(s[l], c);
+                ++l;
+            }
+            else if ((s[i] >= 'a' && s[i] <= 'z') || (s[i] >= '0' && s[i] <= '9'))
+            {
+                std::swap(s[l], s[i]);
+                ++l;
+            }
+        }
+        for (int i = 0; i < l / 2; ++i)
+        {
+            if (s[i] != s[l - 1 - i])
+                return false;
+        }
+        return true;
+    }
+};
+#include<iostream>
+void test(Solution& s1, string& s)
+{
+    std::cout << s1.isPalindrome(s);
+}
+int main()
+
+{
+    string s("ab-c-cb a");
+    Solution s1;
+    test(s1, s);
+    return 0;
+}
