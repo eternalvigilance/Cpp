@@ -1,0 +1,304 @@
+#include<iostream>
+#include<string>
+//int Convert_to_int(char* num1)
+//{
+//	size_t i = 0;
+//	size_t unit = strlen(num1);
+//	size_t unit_pos = unit;
+//	size_t t_int_num1 = 1;
+//	while (i < unit)
+//	{
+//		if (num1[0] != '0')
+//		{
+//			for (int i = 1; i < unit_pos; ++i)
+//			{
+//				t_int_num1 *= 10;
+//			}
+//			break;
+//		}
+//		else
+//			++i;
+//	}
+//	size_t ope_unit = t_int_num1;
+//	size_t int_num1 = 0;
+//	int pos = 0;
+//	while (ope_unit)
+//	{
+//		if (num1[pos] == '0')
+//		{
+//			ope_unit = ope_unit / 10;
+//			++pos;
+//		}
+//		if (num1[pos] == '1')
+//		{
+//			int_num1 += ope_unit;
+//			ope_unit = ope_unit / 10;
+//			++pos;
+//		}
+//		if (num1[pos] == '2')
+//		{
+//			int_num1 += ope_unit * 2;
+//			ope_unit = ope_unit / 10;
+//			++pos;
+//		}
+//		if (num1[pos] == '3')
+//		{
+//			int_num1 += ope_unit * 3;
+//			ope_unit = ope_unit / 10;
+//			++pos;
+//		}
+//		if (num1[pos] == '4')
+//		{
+//			int_num1 += ope_unit * 4;
+//			ope_unit = ope_unit / 10;
+//			++pos;
+//		}
+//		if (num1[pos] == '5')
+//		{
+//			int_num1 += ope_unit * 5;
+//			ope_unit = ope_unit / 10;
+//			++pos;
+//		}
+//		if (num1[pos] == '6')
+//		{
+//			int_num1 += ope_unit * 6;
+//			ope_unit = ope_unit / 10;
+//			++pos;
+//		}
+//		if (num1[pos] == '7')
+//		{
+//			int_num1 += ope_unit * 7;
+//			ope_unit = ope_unit / 10;
+//			++pos;
+//		}
+//		if (num1[pos] == '8')
+//		{
+//			int_num1 += ope_unit * 8;
+//			ope_unit = ope_unit / 10;
+//			++pos;
+//		}
+//		if (num1[pos] == '9')
+//		{
+//			int_num1 += ope_unit * 9;
+//			ope_unit = ope_unit / 10;
+//			++pos;
+//		}
+//	}
+//	return int_num1;
+//}
+//int main()
+//{
+//	char num1[100] = "0";
+//	std::cout << "Please press the value to calculate:";
+//	std::cin >> num1;
+//	int int_num1 = Convert_to_int(num1);
+//	std::cout << "The result:" << int_num1 << std::endl;
+//	std::cout << "Press any key to close this window . . .";
+//	std::cin >> num1;
+//	return 0;
+//}
+//void Convert_to_string(std::string& s,int i)
+//{
+//	int t = i;
+//	int unit = 0;
+//	while (t)
+//	{
+//		t /=10;
+//		++unit;
+//	}
+//	int n = unit;
+//	int b = 0;
+//	for (int p = 0; p < n; ++p)
+//	{
+//		b = i % 10;
+//		s[p] = b + '0';
+//		i /= 10;
+//	}
+//}
+//int main()
+//{ 
+//	std::string s;
+//	Convert_to_string(s,101);
+//	return 0;
+//}
+//using namespace std;
+//class Solution {
+//public:
+//	string& addStrings(string num1, string num2) {
+//		int re = Convert_to_int(num1) + Convert_to_int(num2);
+//		return Convert_to_string(re);
+//
+//	}
+//	string& Convert_to_string(int i)
+//	{
+//		string s;
+//		int t = i;
+//		int unit = 0;
+//		size_t unit_a = 1;
+//		while (t)
+//		{
+//			t /= 10;
+//			++unit;
+//			unit_a *= 10;
+//		}
+//		s.resize(unit);
+//		unit_a /= 10;
+//		int n = unit;
+//		int n1 = n - 1;
+//		int b = 0;
+//		for (int p = 0; p < n; ++p)
+//		{
+//			b = (i / unit_a) % 10;
+//			s[p] = (b + '0');
+//			unit_a /= 10;
+//		}
+//		return s;
+//	}
+//	int Convert_to_int(string& num1)
+//	{
+//		size_t i = 0;
+//		size_t unit = num1.size();
+//		size_t unit_pos = unit;
+//		size_t t_int_num1 = 1;
+//		while (i < unit)
+//		{
+//			if (num1[0] != '0')
+//			{
+//				for (int i = 1; i < unit_pos; ++i)
+//				{
+//					t_int_num1 *= 10;
+//				}
+//				break;
+//			}
+//			else
+//				++i;
+//		}
+//		size_t ope_unit = t_int_num1;
+//		size_t int_num1 = 0;
+//		int pos = 0;
+//		while (ope_unit)
+//		{
+//			if (num1[pos] == '0')
+//			{
+//				ope_unit = ope_unit / 10;
+//				++pos;
+//			}
+//			if (num1[pos] == '1')
+//			{
+//				int_num1 += ope_unit;
+//				ope_unit = ope_unit / 10;
+//				++pos;
+//			}
+//			if (num1[pos] == '2')
+//			{
+//				int_num1 += ope_unit * 2;
+//				ope_unit = ope_unit / 10;
+//				++pos;
+//			}
+//			if (num1[pos] == '3')
+//			{
+//				int_num1 += ope_unit * 3;
+//				ope_unit = ope_unit / 10;
+//				++pos;
+//			}
+//			if (num1[pos] == '4')
+//			{
+//				int_num1 += ope_unit * 4;
+//				ope_unit = ope_unit / 10;
+//				++pos;
+//			}
+//			if (num1[pos] == '5')
+//			{
+//				int_num1 += ope_unit * 5;
+//				ope_unit = ope_unit / 10;
+//				++pos;
+//			}
+//			if (num1[pos] == '6')
+//			{
+//				int_num1 += ope_unit * 6;
+//				ope_unit = ope_unit / 10;
+//				++pos;
+//			}
+//			if (num1[pos] == '7')
+//			{
+//				int_num1 += ope_unit * 7;
+//				ope_unit = ope_unit / 10;
+//				++pos;
+//			}
+//			if (num1[pos] == '8')
+//			{
+//				int_num1 += ope_unit * 8;
+//				ope_unit = ope_unit / 10;
+//				++pos;
+//			}
+//			if (num1[pos] == '9')
+//			{
+//				int_num1 += ope_unit * 9;
+//				ope_unit = ope_unit / 10;
+//				++pos;
+//			}
+//		}
+//		return int_num1;
+//	}
+//};
+//int main()
+//{
+//	string s("123456789");
+//	string s1("987654321");
+//	Solution S;
+//	cout << S.addStrings(s, s1) << endl;
+//	return 0;
+//}
+//using namespace std;
+//class Solution {
+//public:
+//    string addStrings(string num1, string num2) {
+//        string result = "";  // Result string to store the sum.
+//        int carry = 0;       // To store the carry after each digit sum.
+//        int i = num1.size() - 1;  // Pointer for num1, starting from the end.
+//        int j = num2.size() - 1;  // Pointer for num2, starting from the end.
+//        int capacity = 0;
+//        if (num1.compare(num2) <= 0)
+//        {
+//            capacity = num1.size();
+//        }
+//        else
+//            capacity = num2.size();
+//        if ((i == j && num1[0] >= '5' && num2[0] >= '5') || (i - j ==1 || j - i == 1) )
+//        {
+//            result.resize(capacity + 1);
+//        }
+//        // Loop until both strings are processed or there's a carry left.
+//        while (i >= 0 || j >= 0 || carry > 0) {
+//            int n1 = (i >= 0) ? num1[i] - '0' : 0;  // Convert char to int, if valid index.
+//            int n2 = (j >= 0) ? num2[j] - '0' : 0;  // Convert char to int, if valid index.
+//
+//            int sum = n1 + n2 + carry;  // Calculate the sum of both digits plus carry.
+//            carry = sum / 10;           // Calculate the carry for the next iteration.
+//            result[capacity] = ((sum % 10) + '0');  // Append the last digit of the sum to result.
+//            --capacity;
+//            --i;  // Move to the next digit (left).
+//            --j;  // Move to the next digit (left).
+//        }
+//        int w = 0;
+//        while (1)
+//        {
+//            if (result[w] == '\0')
+//            {
+//                result.erase(w);
+//                ++w;
+//            }
+//            else
+//                break;
+//        }
+//        return result;  // Return the final result as a string.
+//    }
+//};
+//int main()
+//{
+//	string s("456");
+//	string s1("77");
+//	Solution S;
+//	cout << S.addStrings(s, s1) << endl;
+//	return 0;
+//}
