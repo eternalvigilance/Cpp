@@ -1,0 +1,111 @@
+#include<iostream>
+using namespace std;
+//class Solution {
+//public:
+//    string reverseWords(string s) {
+//        int i = 0, temp_l = 0, l = s.size() - 1;
+//        while (temp_l <= l)
+//        {
+//            if (s[temp_l] != ' ')
+//            {
+//                ++temp_l;
+//            }
+//            else
+//            {
+//                swap(s, i, temp_l - 1);
+//                i = temp_l + 1;
+//                temp_l = i;
+//            }
+//
+//        }
+//        return s;
+//    }
+//    void swap(string& s, int i, int j)
+//    {
+//        while (i < j)
+//        {
+//            char str  = s[i];
+//            s[i] = s[j];
+//            s[j] = str;
+//            ++i;
+//            --j;
+//        }
+//    }
+//};
+//int main()
+//{
+//    string s("Let's take LeetCode contest");
+//    Solution S;
+//    S.reverseWords(s);
+//
+//    return 0;
+//}
+//class Solution {
+//public:
+//    string reverseWords(string s) {
+//        int i = 0, temp_l = 0, l = s.size();
+//        while ((temp_l = s.find(' ',  temp_l)) != string::npos)
+//        {
+//
+//            swap(s, i, temp_l - 1);
+//            i = temp_l + 1;
+//            temp_l = i;
+//
+//        }
+//        return s;
+//    }
+//    void swap(string& s, int i, int j)
+//    {
+//        while (i < j)
+//        {
+//            char str = s[i];
+//            s[i] = s[j];
+//            s[j] = str;
+//            ++i;
+//            --j;
+//        }
+//    }
+//};
+//int main()
+//{
+//    string s("Let's take LeetCode contest");
+//    Solution S;
+//    S.reverseWords(s);
+//
+//    return 0;
+//}
+class Solution {
+public:
+    string reverseWords(string s) {
+        int i = 0, temp_l = 0, l = s.size();
+        while ((temp_l = s.find(' ', temp_l)) != string::npos)
+        {
+
+            swap(s, i, temp_l - 1);
+            i = temp_l + 1;
+            temp_l = i;
+
+        }
+        swap(s, i, l - 1);
+        return s;
+    }
+    void swap(string& s, int i, int j)
+    {
+        while (i < j)
+        {
+            char str = s[i];
+            s[i] = s[j];
+            s[j] = str;
+            ++i;
+            --j;
+        }
+    }
+};
+int main()
+{
+    string s("Let's take LeetCode contest");
+    Solution S;
+    S.reverseWords(s);
+
+    return 0;
+}
