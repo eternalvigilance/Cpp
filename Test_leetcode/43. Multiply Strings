@@ -1,0 +1,139 @@
+#include<iostream>
+#include<algorithm>
+using namespace std;
+//class Solution {
+//public:
+//    string multiply(string num1, string num2) {
+//        if (num1 == "0")return num1;
+//        if (num2 == "0")return num2;
+//       size_t n1 = convert(num1);
+//       size_t n2 = convert(num2);
+//       size_t product = n1 * n2;
+//       string re;
+//       while (product)
+//       {
+//           re.push_back((product%10 + '0'));
+//           product /= 10;
+//
+//       }
+//       ::reverse(re.begin(), re.end());
+//       cout << re;
+//       return re;
+//
+//
+//    }
+//    size_t convert(string& num1)
+//    {
+//        string::iterator it1 = num1.begin();
+//        string::iterator end1 = num1.end();
+//        size_t size1 = num1.size();
+//        size_t n1 = 0;
+//        size_t n = 1;
+//        while (it1 != end1)
+//        {
+//            n1 += (*(--end1) - '0') * n;
+//            n *= 10;
+//        }
+//        return n1;
+//    }
+//};
+//class Solution {
+//public:
+//    string multiply(string num1, string num2) {
+//        size_t j = num1.size() - 1;
+//        size_t j2 = num2.size() - 1;
+//        string re;
+//        size_t unity = 0;
+//        while (j)
+//        {
+//            if (((num1[j] - '0') * (num2[j2] - '0')) >= 10) ++unity;
+//            re.push_back(((((num1[j] - '0') * (num2[j2] - '0')) % 10) + (unity - '0')));
+//            --j;
+//
+//        }
+//        return re;
+//    }
+//};
+//#include<vector>
+//class Solution {
+//public:
+//    string multiply(string num1, string num2) {
+//        int j = num1.size() - 1;
+//        int j2 = num2.size() - 1;
+//        int t_j2 = j2;
+//        int t_j = j;
+//        string re;
+//        vector<int> vc(j + j2 + 1);
+//        while (t_j >= 0)
+//        {
+//            t_j2 = j2;
+//            while (t_j2 >= 0)
+//            {
+//                vc[t_j + t_j2] += ((num2[t_j2] - '0') * (num1[t_j] - '0'));
+//                --t_j2;
+//            }
+//            --t_j;
+//
+//        }
+//        int i = j + j2;
+//        int f = 0;
+//        while (i >= 0 || f)
+//        {
+//            f += vc[i];
+//            re.push_back(f % 10 + '0');
+//            f /= 10;
+//            --i;
+//
+//
+//        }
+//        ::reverse(re.begin(), re.end());
+//        return re;
+//    }
+//};
+#include<algorithm>
+#include<vector>
+class Solution {
+public:
+    string multiply(string num1, string num2) {
+        if (num1 == "0")return num1;
+        if (num2 == "0")return num2;
+        int j = num1.size() - 1;
+        int j2 = num2.size() - 1;
+        int t_j2 = j2;
+        int t_j = j;
+        string re;
+        vector<int> vc(j + j2 + 1);
+        while (t_j >= 0)
+        {
+            t_j2 = j2;
+            while (t_j2 >= 0)
+            {
+                vc[t_j + t_j2] += ((num2[t_j2] - '0') * (num1[t_j] - '0'));
+                --t_j2;
+            }
+            --t_j;
+
+        }
+        int i = j + j2;
+        int f = 0;
+        while (i >= 0 || f)
+        {
+            if (i >= 0)f += vc[i];
+            re.push_back(f % 10 + '0');
+            f /= 10;
+            --i;
+
+
+        }
+        ::reverse(re.begin(), re.end());
+        return re;
+    }
+};
+int main()
+{
+    string num1("123");
+    string num2("456");
+    Solution S;
+    S.multiply(num1, num2);
+    return 0;
+}
