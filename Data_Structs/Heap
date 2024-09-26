@@ -1,0 +1,180 @@
+#include<iostream>
+using namespace std;
+namespace heapoflist
+{
+	struct bignode
+	{
+		typedef int element_type;
+		element_type _itself;
+		bignode* _l_child;
+		bignode* _r_child;
+		bignode()
+			:_itself(0),_l_child(nullptr),_r_child(nullptr){}
+		bignode(const element_type* val)
+			:_itself(0), _l_child(nullptr), _r_child(nullptr) 
+		{
+			sort(val);
+		}
+		void sort(const element_type* val)
+		{
+			int size = sizeof(val) / sizeof(element_type);
+			bignode* tmp = this;
+			_itself = val[0];
+			for (int i = 1; i < size - 1; ++i)
+			{
+				tmp->_l_child->_itself = val[i];
+				tmp->_r_child->_itself = val[i + 1];
+			}
+		}
+	};
+
+
+}
+#include<cstring>
+#include<cstdlib>
+namespace heapofarray
+{
+	struct bigheap
+	{
+		typedef int element_type;
+		element_type* array;
+		size_t capacity;
+		bigheap()
+			:array(nullptr),capacity(0)
+		{}
+		bigheap(element_type* val,size_t _size)
+			:capacity(_size)
+		{
+			array = (element_type*)malloc(capacity * sizeof(element_type));
+			memcpy(array,val,capacity*sizeof(element_type));
+			for (int i = (_size - 2) / 2; i >= 0; --i)
+			{
+				adjustdown(i);
+			}
+		}
+		size_t size(element_type* _array)
+		{
+			return capacity;
+		}
+		void adjustdown(size_t i)
+		{
+		    //Is error ,because I don't know the rule of adjustdown prerequisite 
+		    //of the left and right tree should be a big or little heap before coding it.
+			//for (int i = 0; i * 2 + 2 < size(array);i = i * 2 +2)
+			//{
+			//	if (array[2 * i + 1] > array[i] || array[2 * i + 2] > array[i])
+			//	{
+			//		swap(array[i],array[2 * i + 1] > array[2 * i + 2] ? array[2 * i + 1] : array[2 * i + 1]);
+			//	}
+			//} 
+			size_t root = i;
+			size_t parent = root;
+			size_t child = parent * 2 + 1;
+			while (child < size(array))
+			{
+				if (array[child] < array[child + 1])++child;
+				if (array[child] > array[parent])
+				{
+					swap(array[child], array[parent]);
+					parent = child;
+					child = parent * 2 + 1;
+				}
+				else
+					break;
+			}
+		}
+		void swap(element_type& l, element_type& r)
+		{
+			element_type tmp = l ;
+			l = r;
+			r = tmp;
+		}
+		friend ostream& operator<<(ostream& out, bigheap& h);
+	};
+	ostream& operator<<(ostream& out, bigheap& h)
+	{
+		for (int i = 0; i < h.size(h.array); ++i)
+		{
+			out << h.array[i];
+		}
+		out << std::endl;
+		return out;
+	}
+}
+int main()
+{
+	int array[] = { 6,3,10,5,4,9,8 };
+	size_t size = sizeof(array) / sizeof(array[0]);
+	heapofarray::bigheap H(array,size);
+	cout << H;
+	return 0;
+}
+//#include <cstring>
+//#include <cstdlib>
+//
+//namespace heapofarray {
+//
+//    struct bigheap {
+//        typedef int element_type;
+//        element_type* array;
+//        size_t capacity;
+//
+//        bigheap()
+//            : array(nullptr), capacity(0) {}
+//
+//        bigheap(element_type* val, size_t size)
+//            : capacity(size) {
+//            array = (element_type*)malloc(capacity * sizeof(element_type));
+//            memcpy(array, val, capacity * sizeof(element_type));
+//        }
+//
+//        ~bigheap() {
+//            free(array);
+//        }
+//
+//        size_t size() const {
+//            return capacity;
+//        }
+//
+//        void adjustdown() {
+//            size_t n = size();
+//            size_t parent = 0;
+//
+//            while (parent * 2 + 1 < n) {
+//                size_t child = parent * 2 + 1;
+//                if (child + 1 < n && array[child] < array[child + 1]) {
+//                    child++;
+//                }
+//                else
+//                    break;
+//                swap(array[parent], array[child]);
+//                parent = child;
+//            }
+//        }
+//
+//        void swap(element_type& l, element_type& r) {
+//            element_type tmp = l;
+//            l = r;
+//            r = tmp;
+//        }
+//		friend ostream& operator<<(ostream& out, bigheap& h);
+//    };
+//	ostream& operator<<(ostream& out, bigheap& h)
+//	{
+//		for (int i = 0; i < h.size(); ++i)
+//		{
+//			out << h.array[i];
+//		}
+//		out << std::endl;
+//		return out;
+//	}
+//}
+//
+//int main() {
+//    int array[] = { 6, 5, 10, 3, 4, 9, 8 };
+//    size_t size = sizeof(array) / sizeof(array[0]);
+//    heapofarray::bigheap H(array, size);
+//    H.adjustdown();
+//    cout << H << endl;
+//    return 0;
+//}
