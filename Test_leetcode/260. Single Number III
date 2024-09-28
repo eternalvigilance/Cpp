@@ -1,0 +1,116 @@
+class Solution {
+public:
+    vector<int> singleNumber(vector<int>& nums) {
+        size_t res = 0;
+        // XOR all the numbers to find res which is the XOR of the two unique numbers
+        for (int val : nums) {
+            res ^= val;
+        }
+        // Find the first bit of 1,because When you negate a number using two's complement ,
+        // the rightmost 1 remains the same
+        size_t diffBit = res & ((~res) + 1);  // Isolates the rightmost set bit
+        // Initialize the two unique numbers to 0
+        int num1 = 0, num2 = 0;
+        // Partition the numbers into two groups based on the differing bit
+        for (int val : nums) {
+            if (val & diffBit) {
+                num1 ^= val;  // Numbers with that bit set
+            }
+            else {
+                num2 ^= val;  // Numbers with that bit not set
+            }
+        }
+        // Return the two unique numbers
+        return { num1, num2 };
+    }
+};
+class Solution {
+public:
+    vector<int> singleNumber(vector<int>& nums) {
+        size_t res = 0;
+        // XOR all the numbers to find res which is the XOR of the two unique numbers
+        for (int val : nums) {
+            res ^= val;
+        }
+
+        // Find the first bit of 1,because When you negate a number using two's complement ,
+        // the rightmost 1 remains the same
+        size_t diffBit = res & (-res);  // Isolates the rightmost set bit
+
+        // Initialize the two unique numbers to 0
+        int num1 = 0, num2 = 0;
+
+        // Partition the numbers into two groups based on the differing bit
+        for (int val : nums) {
+            if (val & diffBit) {
+                num1 ^= val;  // Numbers with that bit set
+            }
+            else {
+                num2 ^= val;  // Numbers with that bit not set
+            }
+        }
+
+        // Return the two unique numbers
+        return { num1, num2 };
+    }
+};
+class Solution {
+public:
+    vector<int> singleNumber(vector<int>& nums) {
+        int res = 0;
+        // XOR all the numbers to find res which is the XOR of the two unique numbers
+        for (int val : nums) {
+            res ^= val;
+        }
+
+        // Find the first bit where the two numbers differ
+        int diffBit = res & (-res);  // Isolates the rightmost set bit
+
+        // Initialize the two unique numbers to 0
+        int num1 = 0, num2 = 0;
+
+        // Partition the numbers into two groups based on the differing bit
+        for (int val : nums) {
+            if (val & diffBit) {
+                num1 ^= val;  // Numbers with that bit set
+            }
+            else {
+                num2 ^= val;  // Numbers with that bit not set
+            }
+        }
+
+        // Return the two unique numbers
+        return { num1, num2 };
+    }
+};
+class Solution {
+public:
+    vector<int> singleNumber(vector<int>& nums) {
+        int res = 0;
+        for (int val : nums)
+        {
+            res ^= val;
+        }
+        int i = 0;
+        while (1)
+        {
+            if ((res >> i) & 1)break;
+            ++i;
+        }
+        vector<int> array;
+        for (int val2 : nums)
+        {
+            if ((val2 >> i) & 1)array.push_back(val2);
+        }
+        vector<int> re;
+        int renum = 0;
+        for (int val3 : array)
+        {
+            renum ^= val3;
+        }
+        re.push_back(renum);
+        re.push_back(renum ^ res);
+        return re;
+    }
+
+};
