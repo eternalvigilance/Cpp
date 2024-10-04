@@ -1,0 +1,95 @@
+#include<iostream>
+class Sort
+{
+public:
+	void InsertSort(int* array, int size)
+	{
+		int tmp = array[1];
+		for (int i = 1; i < size; ++i)
+		{
+			tmp = array[i];
+			int j = i - 1;
+			while (j >= 0)
+			{
+				if (array[i] < array[j])
+				{
+					array[i] = array[j];
+					array[j] = tmp;
+					--i;
+					--j;
+				}
+				else
+					--j;
+			}
+
+		}
+	}
+	void O_InsertSort(int* array, int size)
+	{
+		for (int i = 1; i < size; ++i)
+		{
+			int internal = i - 1;
+			int external = array[i];
+			while (internal >= 0 && array[internal] > external)
+			{
+				array[internal + 1] = array[internal];
+				--internal;
+			}
+			array[internal + 1] = external;
+		}
+	}
+	void ShellSort(int* array, int size)
+	{			
+
+		for (int gap = size / 2; gap > 1; gap /= 2)
+		{
+			int n = gap;
+			int j = 0;
+			while (n >= 1)
+			{
+				for (int i = j; i + gap < size; i += gap)
+				{
+					if (array[i] > array[i + gap])
+					{
+						int tmp = array[i];
+						array[i] = array[i + gap];
+						array[i + gap] = tmp;
+					}
+				}
+				--n;
+				++j;
+			}
+
+		}
+		O_InsertSort(array,size);
+
+	}
+	void O_ShellSort(int* array, int size)
+	{
+		for (int gap = size / 2; gap > 0; gap /= 2)
+		{
+			for (int i = gap; i < size;++i)
+			{
+				int tmp = array[i];
+				int j = i;
+				for (j = i; j > gap && tmp < array[j -gap]; j -= gap)
+				{
+					array[j] = array[j - gap];
+				}
+				array[j] = tmp;
+			}
+		}
+	}
+};
+int main()
+{
+	Sort A;
+	int array[] = { 1,4,6,7,8,5 };
+	int size = sizeof(array) / sizeof(array[0]);
+	A.O_ShellSort(array,size);
+	for (int i = 0; i < size; ++i)
+	{
+		std::cout << array[i] << " ";
+	}
+	return 0;
+}
