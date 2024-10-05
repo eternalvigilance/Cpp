@@ -59,10 +59,8 @@ public:
 				--n;
 				++j;
 			}
-
 		}
-		O_InsertSort(array,size);
-
+		InsertSort(array, size);
 	}
 	void O_ShellSort(int* array, int size)
 	{
@@ -72,7 +70,7 @@ public:
 			{
 				int tmp = array[i];
 				int j = i;
-				for (j = i; j > gap && tmp < array[j -gap]; j -= gap)
+				for (; j >= gap && tmp < array[j -gap]; j -= gap)
 				{
 					array[j] = array[j - gap];
 				}
@@ -80,13 +78,153 @@ public:
 			}
 		}
 	}
+	void SelectSort(int* array, int size)
+	{
+		int max_index = 0;
+		int rightmost = size - 1;
+		while (rightmost)
+		{
+			max_index = 0;
+			for (int i = 0; i <= rightmost; ++i)
+			{
+				if (array[max_index] < array[i])max_index = i;
+
+			}
+			if(max_index != rightmost)swap(&array[max_index], &array[rightmost]);
+			--rightmost;
+		}
+
+	}
+	void O_SelectSort(int* array, int size)
+	{
+		int max = 0, min = size - 1;
+		int rightmost = size - 1, leftmost = 0;
+		while (rightmost > leftmost)
+		{
+			for (int i = leftmost; i <= rightmost; ++i)
+			{
+				if(array[max] < array[i])max = i;
+				if (array[min] > array[i])min = i;
+
+			}
+			if(max != rightmost)swap(&array[rightmost], &array[max]);
+			if (min == rightmost)min = max;// Adjust min if it was swapped
+			if(min != leftmost)swap(&array[leftmost], &array[min]);
+			++leftmost;
+			--rightmost;
+			max = leftmost;
+			min = rightmost;
+		}
+	}
+	//void HeapSort(int* array, int size)
+	//{
+	//	//Build the heap
+	//	for (int i = size - 1; i >= 0; --i)
+	//	{
+	//		Adjustdown(array, (i -1)/2, size);
+	//	}
+	//	//Sort the last layer of heap
+	//	for (int i = size - 1; i > (i - 1) / 2; --i)
+	//	{
+	//		O_SelectSort(&array[((i - 1) / 2) + 1], i - ((i - 1) / 2));
+	//	}
+	//}
+	// 	void Adjustdown(int* array, int root,int size)
+	//{
+	//	int parent = root;
+	//	int child = root * 2 + 1;
+	//	while (size > child)
+	//	{
+	//		if (child + 1 < size && array[child] > array[child + 1])swap(&array[child + 1],&array[child];
+	//		if (array[parent] > array[child])
+	//		{
+	//			swap(&array[parent], &array[child]);
+	//			parent = child;
+	//			child = child * 2 + 1;
+	//		}
+	//		else
+	//			break;
+	//	}
+	//}
+	//When building a heap, the array is partially ordered
+	//because each parent node is larger than its child nodes,
+	//maintaining the max - heap property.However,
+	//when I attempted to sort the nodes at the same level of the heap,
+	//I mistakenly focused only on sorting sibling nodes(nodes with the same parent).
+	//The issue arises because even though the nodes at the last layer may be ordered,
+	//the middle parent nodes remain unordered.Sorting only the last layer does not guarantee the heap is fully sorted,
+	//as this overlooks the fact that the relationships between parent and
+	//child nodes in different parts of the heap may still violate the heap property.
+	//Therefore, my approach was flawed because it didn't account for maintaining order across the entire heap. 
+	//The correct method requires not just sorting sibling nodes,
+	//but also ensuring that the heap property is maintained globally by
+	//adjusting the heap from top to bottom after each extraction of the maximum element.
+	//So to sort in asending order, you must build a max heap.
+	void HeapSort(int* array, int size)
+	{
+		for (int i = size - 1; i >= 0; --i)
+		{
+			Adjustdown(array, (i - 1) / 2, size);
+		}
+		for (int i = size - 1; i > 0; --i)
+		{
+			swap(&array[0], &array[i]);
+			Adjustdown(array, 0, i);
+		}
+
+	}
+	void Adjustdown(int* array, int root,int size)
+	{
+		int parent = root;
+		int child = root * 2 + 1;
+		while(size > child)
+		{
+			if (child + 1 < size && array[child] < array[child + 1])++child;
+			if (array[parent] < array[child])
+			{
+				swap(&array[parent], &array[child]);
+				parent = child;
+				child = child * 2 + 1;
+			}
+			else
+				break;
+		}
+	}
+	void BubbleSort(int* array, int size)
+	{
+		for (int i = 0; i < size - 1 ; ++i)
+		{
+			for (int j = 0 ; j < size -i - 1; ++j)
+			{
+				if (array[j] > array[j + 1])swap(&array[j], &array[j + 1]);
+			}
+		}
+	}
+	void QuickSort(int* array, int size)
+	{
+
+	}
+private:
+	void swap(int* l, int* r)
+	{
+		int tmp = *l;
+		*l = *r;
+		*r = tmp;
+	}
 };
 int main()
 {
 	Sort A;
-	int array[] = { 1,4,6,7,8,5 };
+	int array[] = {5,1,1,2,8,0,0,3};
 	int size = sizeof(array) / sizeof(array[0]);
-	A.O_ShellSort(array,size);
+	//A.InsertSort(array, size);
+	//A.O_InsertSort(array, size);
+	//A.ShellSort(array, size);
+	//A.O_ShellSort(array,size);
+	//A.SelectSort(array, size);
+	//A.O_SelectSort(array, size);
+	//A.HeapSort(array, size);
+	A.BubbleSort(array, size);
 	for (int i = 0; i < size; ++i)
 	{
 		std::cout << array[i] << " ";
