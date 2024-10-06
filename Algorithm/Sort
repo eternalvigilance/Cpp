@@ -200,9 +200,132 @@ public:
 			}
 		}
 	}
-	void QuickSort(int* array, int size)
+	void QuickSort(int* array, int begin,int end)
 	{
-
+		if (begin >= end)return;
+		int indexofkey = O3_PartSort(array, begin, end);
+		QuickSort(array, begin, indexofkey - 1);
+		QuickSort(array, indexofkey + 1,end);
+	}
+	int PartSort(int* array, int leftmost, int rightmost)
+	{
+		int key = leftmost;
+		while (leftmost < rightmost)
+		{
+			while (leftmost < rightmost && array[rightmost] >= array[key])--rightmost;//Find the number less than kry
+			while (leftmost < rightmost && array[leftmost] <= array[key])++leftmost;//Find the larger
+			if (leftmost < rightmost)swap(&array[leftmost], &array[rightmost]);
+		}
+		swap(&array[key], &array[leftmost]);
+		return leftmost;
+	}
+	int O1_PartSort(int* array, int leftmost, int rightmost)
+	{
+		int median = leftmost + (rightmost - leftmost) / 2;
+		if (array[leftmost] > array[rightmost] && array[leftmost] < array[median])median = leftmost;
+		else if (array[rightmost] > array[leftmost] && array[rightmost] < array[median])median = rightmost;
+		if (leftmost != median)
+		{
+			swap(&array[leftmost], &array[median]);//Ensure the leftmost is key
+			median = leftmost;
+		}
+		while (leftmost < rightmost)
+		{
+			while (leftmost < rightmost && array[rightmost] >= array[median])--rightmost;
+			while (leftmost < rightmost && array[leftmost] <= array[median])++leftmost;
+			if (rightmost > leftmost)swap(&array[leftmost], &array[rightmost]);
+		}
+		if (array[median] > array[leftmost])
+		{
+			swap(&array[median], &array[leftmost]);
+			median = leftmost;
+		}
+		return median;
+	}
+	int O2_PartSort(int* array, int leftmost, int rightmost)
+	{
+		int median = leftmost + (rightmost - leftmost) / 2;
+		if (array[leftmost] > array[rightmost] && array[leftmost] < array[median])median = leftmost;
+		else if (array[rightmost] > array[leftmost] && array[rightmost] < array[median])median = rightmost;
+		int key = array[median];
+		if (leftmost != median)swap(&array[leftmost], &array[median]);//Ensure the leftmost is key
+		while (leftmost < rightmost)
+		{
+			while (leftmost < rightmost && array[rightmost] >= key)--rightmost;
+			if (leftmost < rightmost)array[leftmost] = array[rightmost];
+			while (leftmost < rightmost && array[leftmost] <= key)++leftmost;
+			if (leftmost < rightmost)array[rightmost] = array[leftmost];
+		}
+		array[leftmost] = key;
+		return leftmost;
+	}
+	int O3_PartSort(int* array, int leftmost, int rightmost)
+	{
+		int median = leftmost + (rightmost - leftmost) / 2;
+		if (array[leftmost] > array[rightmost] && array[leftmost] < array[median])median = leftmost;
+		else if (array[rightmost] > array[leftmost] && array[rightmost] < array[median])median = rightmost;
+		if (leftmost != median)swap(&array[leftmost], &array[median]);
+		int prev = leftmost;
+		int cur = leftmost + 1;
+		while (cur <= rightmost)
+		{
+			if (array[cur] < array[median] && ++prev != cur)swap(&array[cur], &array[prev]);
+			++cur;
+		}
+		swap(&array[prev], &array[median]);
+		return prev;
+	}
+	void MergeSort(int* array, int left,int right)
+	{
+		if (left >= right)return;
+		int median = left + (right - left) / 2;
+		MergeSort(array, left, median);
+		MergeSort(array, median + 1, right);
+		Merge(array, left, median, right);
+	}
+	void Merge(int* array, int left, int median, int right)
+	{
+		int sl = median - left + 1;//size of left subarray
+		int sr = right - median;
+		int* left_array = (int*)malloc(sl * sizeof(int));
+		int* right_array = (int*)malloc(sr * sizeof(int));
+		for (int i = 0; i < sl; ++i)
+		{
+			left_array[i] = array[left + i];
+		}
+		for (int i = 0; i < sr; ++i)
+		{
+			right_array[i] = array[median + 1 + i];
+		}
+		int i_l = 0, i_r = 0 ,i_a = left;
+		while (i_l < sl && i_r < sr)
+		{
+			if (left_array[i_l] > right_array[i_r])
+			{
+				array[i_a] = right_array[i_r];
+				++i_r;
+			}
+			if (left_array[i_l] < right_array[i_r])
+			{
+				array[i_a] = left_array[i_l];
+				++i_l;
+			}
+			++i_a;
+		}
+		while (i_l < sl)
+		{
+			array[i_a] = left_array[i_l];
+			++i_l;
+			++i_a;
+		}
+		while (i_r < sr)
+		{
+			array[i_a] = right_array[i_r];
+			++i_r;
+			++i_a;
+		}
+		free(left_array);
+		free(right_array);
 	}
 private:
 	void swap(int* l, int* r)
@@ -215,7 +338,7 @@ private:
 int main()
 {
 	Sort A;
-	int array[] = {5,1,1,2,8,0,0,3};
+	int array[] = {-1,2,-8,-10};
 	int size = sizeof(array) / sizeof(array[0]);
 	//A.InsertSort(array, size);
 	//A.O_InsertSort(array, size);
@@ -224,7 +347,9 @@ int main()
 	//A.SelectSort(array, size);
 	//A.O_SelectSort(array, size);
 	//A.HeapSort(array, size);
-	A.BubbleSort(array, size);
+	//A.BubbleSort(array, size);
+	//A.QuickSort(array, 0, size - 1);
+	A.MergeSort(array, 0,size -1);
 	for (int i = 0; i < size; ++i)
 	{
 		std::cout << array[i] << " ";
