@@ -1,4 +1,10 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include<iostream>
+#include<cstdlib>
+#include<cstdio>
+#include<cstring>
+#include<cstdarg>
+
 class Sort
 {
 public:
@@ -281,14 +287,23 @@ public:
 		int median = left + (right - left) / 2;
 		MergeSort(array, left, median);
 		MergeSort(array, median + 1, right);
-		Merge(array, left, median, right);
+		In_Merge(array, left, median, right);
 	}
-	void Merge(int* array, int left, int median, int right)
+	void In_Merge(int* array, int left, int median, int right)
 	{
 		int sl = median - left + 1;//size of left subarray
-		int sr = right - median;
+		int sr = 1;
+		if (right != median) sr = right - median;
 		int* left_array = (int*)malloc(sl * sizeof(int));
+		if (left_array == nullptr)
+		{
+			exit(1);
+		}
 		int* right_array = (int*)malloc(sr * sizeof(int));
+		if (right_array == nullptr)
+		{
+			exit(1);
+		}
 		for (int i = 0; i < sl; ++i)
 		{
 			left_array[i] = array[left + i];
@@ -300,7 +315,7 @@ public:
 		int i_l = 0, i_r = 0 ,i_a = left;
 		while (i_l < sl && i_r < sr)
 		{
-			if (left_array[i_l] > right_array[i_r])
+			if (left_array[i_l] >= right_array[i_r])
 			{
 				array[i_a] = right_array[i_r];
 				++i_r;
@@ -327,6 +342,121 @@ public:
 		free(left_array);
 		free(right_array);
 	}
+	void Ex_MergeSort(const char* file)
+	{
+		FILE* out = fopen(file, "r");
+		if (out == nullptr)exit(1);
+		int i = 0;
+		int filecount = 0;
+		const int size = 6;
+		int num = 0;
+		int array[size];
+		char subfilename[20];
+		memset(array, 0, sizeof(int)*size);
+		if (fscanf(out, "%d\n", &num) != EOF) {
+			do {
+				if (i < size) {
+					array[i++] = num;
+				}
+				else {
+					// Sort the current chunk
+					QuickSort(array, 0, size - 1);
+
+					// Write sorted chunk to a subfile
+					char subfilename[20];
+					sprintf(subfilename, "subfile%d.txt", ++filecount);
+
+					FILE* in = fopen(subfilename, "w");
+					if (in == NULL) {
+						printf("Error creating subfile\n");
+						exit(2);
+					}
+
+					for (int j = 0; j < size; ++j) {
+						fprintf(in, "%d\n", array[j]);
+					}
+					fclose(in);
+
+					// Start a new chunk
+					array[0] = num;
+					i = 1;
+				}
+			} while (fscanf(out, "%d\n", &num) != EOF);
+
+			// Handle the last chunk if there are remaining elements
+			if (i > 0) {
+				QuickSort(array, 0, i - 1);
+
+				// Write remaining sorted elements to a new subfile
+				char subfilename[20];
+				sprintf(subfilename, "subfile%d.txt", ++filecount);
+
+				FILE* in = fopen(subfilename, "w");
+				if (in == NULL) {
+					printf("Error creating subfile\n");
+					exit(2);
+				}
+
+				for (int j = 0; j < i; ++j) {
+					fprintf(in, "%d\n", array[j]);
+				}
+				fclose(in);
+			}
+		}
+		fclose(out);
+
+		char f1[20], f2[20], mergefile[20];
+		int merge_suffix = 0;
+		int k = filecount;
+		while (k > 1)
+		{
+			sprintf(f1, "subfile%d.txt", k);
+			sprintf(f2, "subfile%d.txt", k - 1);
+			sprintf(mergefile, "merge%d.txt", merge_suffix);
+			Ex_Merge(f1, f2, mergefile);
+			remove(f1);
+			remove(f2);
+			rename(mergefile, f1);
+			++merge_suffix;
+			k -= 2;
+		}
+	}
+	void Ex_Merge(const char* s1, const char* s2,const char* out)
+	{
+		FILE* f1 = fopen(s1, "r");
+		FILE* f2 = fopen(s2, "r");
+		FILE* fout = fopen(out, "w");
+		if (f1 == nullptr || f2 == nullptr || out == nullptr)exit(3);
+		int num1, num2;
+		int readf1 = fscanf(f1, "%d",&num1);
+		int readf2 = fscanf(f2, "%d", &num2);
+		while (readf1 != EOF && readf2 != EOF)
+		{
+			if (num1 <= num2)
+			{
+				fprintf(fout, "%d\n", num1);
+				readf1 = fscanf(f1, "%d", &num1);
+			}
+			if (num2 < num1)
+			{
+				fprintf(fout, "%d\n", num2);
+				readf2 = fscanf(f2, "%d",&num2);
+			}
+		}
+		while (readf1 != EOF)
+		{
+			fprintf(fout, "%d\n", num1);
+			readf1 = fscanf(f1, "%d", &num1);
+		}
+		while (readf2 != EOF)
+		{
+			fprintf(fout, "%d\n", num2);
+			readf2 = fscanf(f2, "%d", &num2);
+		}
+		fclose(f1);
+		fclose(f2);
+		fclose(fout);
+	}
 private:
 	void swap(int* l, int* r)
 	{
@@ -338,7 +468,7 @@ private:
 int main()
 {
 	Sort A;
-	int array[] = {-1,2,-8,-10};
+	int array[] = {-1,2,-8,-10,3};
 	int size = sizeof(array) / sizeof(array[0]);
 	//A.InsertSort(array, size);
 	//A.O_InsertSort(array, size);
@@ -349,7 +479,7 @@ int main()
 	//A.HeapSort(array, size);
 	//A.BubbleSort(array, size);
 	//A.QuickSort(array, 0, size - 1);
-	A.MergeSort(array, 0,size -1);
+	A.Ex_MergeSort("Tobesorted.txt");
 	for (int i = 0; i < size; ++i)
 	{
 		std::cout << array[i] << " ";
