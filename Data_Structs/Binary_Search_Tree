@@ -1,0 +1,181 @@
+#include<iostream>
+using namespace std;
+template<class K>
+struct TreeNode
+{
+	K _key;
+	TreeNode<K>* _left;
+	TreeNode<K>* _right;
+	TreeNode(const K& key)
+		:_key(key),_left(nullptr),_right(nullptr)
+	{}
+};
+template<class K>
+class Binary_Search_Tree
+{
+	typedef TreeNode<K> Node;
+public:
+	bool insert(const K& key)
+	{
+		if (_root == nullptr)
+		{
+			_root = new Node(key);
+			return true;
+		}
+		Node* cur = _root;
+		Node* parent = _root;
+		while (cur)
+		{
+			if (key > cur->_key)
+			{
+				parent = cur;
+				cur = cur->_right;
+			}
+			else if (key < cur->_key)
+			{
+				parent = cur;
+				cur = cur->_left;
+			}
+			else
+				return false;
+		}
+		cur = new Node(key);
+		if (key > parent->_key)parent->_right = cur;
+		else parent->_left = cur;
+		return true;
+	}
+	Node* find(const K& n)
+	{
+		if (_root == nullptr)return nullptr;
+		Node* cur = _root;
+		while (cur)
+		{
+			if (n > cur->_key)
+			{
+				cur = cur->_right;
+			}
+			else if (n < cur->_key)
+			{
+				cur = cur->_left;
+			}
+			else
+				return cur;
+		}
+		return nullptr;
+
+	}
+	bool erase(const K& n)
+	{
+		if (_root == nullptr)return false;
+		Node* cur = _root;
+		Node* parent = cur;
+		while (cur)
+		{
+			if (n > cur->_key)
+			{
+				parent = cur;
+				cur = cur->_right;
+			}
+			else if (n < cur->_key)
+			{
+				parent = cur;
+				cur = cur->_left;
+			}
+			else
+			{
+				if (cur->_left == nullptr && cur->_right == nullptr)
+				{
+					if (cur == parent->_left)
+					{
+						delete cur;
+						parent->_left = nullptr;
+						return true;
+					}
+					if (cur == parent->_right)
+					{
+						delete cur;
+						parent->_right = nullptr;
+						return true;
+					}
+				}
+				if (parent->_right == cur || parent == cur)
+				{
+					Node* tmp = cur;
+					Node* parent_t = cur;
+					while (tmp->_right)
+					{
+						parent_t = tmp;
+						tmp = tmp->_right;
+					}
+					if (cur->_right != nullptr)
+					{
+						cur->_key = tmp->_key;
+						delete tmp;
+					}
+					else
+					{
+						parent->_right = cur->_left;
+						delete cur;
+					}
+					parent_t->_right = nullptr;
+					return true;
+				}
+				if (parent->_left == cur)
+				{
+					if (cur->_left != nullptr)
+					{
+						parent->_left = cur->_left;
+						delete cur;
+						return true;
+					}
+					else
+					{
+						Node* tmp_r = cur->_right;
+						while (tmp_r->_right)
+						{
+							tmp_r = tmp_r->_right;
+						}
+						cur->_key = tmp_r->_key;
+						delete tmp_r;
+						return true;
+					}
+					return true;
+				}
+
+			}
+		}
+		return false;
+	}
+	void _inorder(Node* root)
+	{
+		if (root == nullptr)return;
+		_inorder(root->_left);
+		cout << root->_key << " ";
+		_inorder(root->_right);
+	}
+	void inorder()
+	{
+		_inorder(_root);
+		cout << endl;
+	}
+private:
+	Node* _root = nullptr;
+};
+typedef Binary_Search_Tree<int> BST;
+int main(void)
+{
+	BST B;
+	int a[] = { 5,3,4,1,7,8,2,6,0,9 };
+	for (auto v : a)
+	{
+		B.insert(v);
+	}
+	B.inorder();
+	//cout << B.find(20) << endl;
+	for (auto e : a)
+	{
+		B.erase(e);
+	}
+	B.inorder();
+	return 0;
+}
