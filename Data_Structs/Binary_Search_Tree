@@ -64,84 +64,123 @@ public:
 		return nullptr;
 
 	}
-	bool erase(const K& n)
+	//bool erase(const K& n)
+	//{
+	//	if (_root == nullptr)return false;
+	//	Node* cur = _root;
+	//	Node* parent = cur;
+	//	while (cur)
+	//	{
+	//		if (n > cur->_key)
+	//		{
+	//			parent = cur;
+	//			cur = cur->_right;
+	//		}
+	//		else if (n < cur->_key)
+	//		{
+	//			parent = cur;
+	//			cur = cur->_left;
+	//		}
+	//		else
+	//		{
+	//			if (cur->_left == nullptr && cur->_right == nullptr)
+	//			{
+	//				if (cur == parent->_left)
+	//				{
+	//					delete cur;
+	//					parent->_left = nullptr;
+	//					return true;
+	//				}
+	//				if (cur == parent->_right)
+	//				{
+	//					delete cur;
+	//					parent->_right = nullptr;
+	//					return true;
+	//				}
+	//			}
+	//			if (parent->_right == cur || parent == cur)
+	//			{
+	//				Node* tmp = cur;
+	//				Node* parent_t = cur;
+	//				while (tmp->_right)
+	//				{
+	//					parent_t = tmp;
+	//					tmp = tmp->_right;
+	//				}
+	//				if (cur->_right != nullptr)
+	//				{
+	//					cur->_key = tmp->_key;
+	//					delete tmp;
+	//				}
+	//				else
+	//				{
+	//					parent->_right = cur->_left;
+	//					delete cur;
+	//				}
+	//				parent_t->_right = nullptr;
+	//				return true;
+	//			}
+	//			if (parent->_left == cur)
+	//			{
+	//				if (cur->_left != nullptr)
+	//				{
+	//					parent->_left = cur->_left;
+	//					delete cur;
+	//					return true;
+	//				}
+	//				else
+	//				{
+	//					Node* tmp_r = cur->_right;
+	//					while (tmp_r->_right)
+	//					{
+	//						tmp_r = tmp_r->_right;
+	//					}
+	//					cur->_key = tmp_r->_key;
+	//					delete tmp_r;
+	//					return true;
+	//				}
+	//				return true;
+	//			}
+
+	//		}
+	//	}
+	//	return false;
+	//}
+	bool erase(const K& key)
 	{
-		if (_root == nullptr)return false;
 		Node* cur = _root;
 		Node* parent = cur;
 		while (cur)
 		{
-			if (n > cur->_key)
+			if (key > cur->_key)
 			{
 				parent = cur;
 				cur = cur->_right;
 			}
-			else if (n < cur->_key)
+			else if (key < cur->_key)
 			{
 				parent = cur;
 				cur = cur->_left;
 			}
 			else
 			{
-				if (cur->_left == nullptr && cur->_right == nullptr)
+				if (parent == cur)
 				{
-					if (cur == parent->_left)
-					{
-						delete cur;
-						parent->_left = nullptr;
-						return true;
-					}
-					if (cur == parent->_right)
-					{
-						delete cur;
-						parent->_right = nullptr;
-						return true;
-					}
-				}
-				if (parent->_right == cur || parent == cur)
-				{
-					Node* tmp = cur;
-					Node* parent_t = cur;
-					while (tmp->_right)
-					{
-						parent_t = tmp;
-						tmp = tmp->_right;
-					}
-					if (cur->_right != nullptr)
-					{
-						cur->_key = tmp->_key;
-						delete tmp;
-					}
-					else
-					{
-						parent->_right = cur->_left;
-						delete cur;
-					}
-					parent_t->_right = nullptr;
+					e_root(cur);
 					return true;
 				}
-				if (parent->_left == cur)
+				else if (cur->_left == nullptr && cur->_right == nullptr)
 				{
-					if (cur->_left != nullptr)
-					{
-						parent->_left = cur->_left;
-						delete cur;
-						return true;
-					}
-					else
-					{
-						Node* tmp_r = cur->_right;
-						while (tmp_r->_right)
-						{
-							tmp_r = tmp_r->_right;
-						}
-						cur->_key = tmp_r->_key;
-						delete tmp_r;
-						return true;
-					}
+					_leaf(cur, parent);
 					return true;
 				}
-
+				else
+				{
+					if (cur->_left != nullptr)_left_tree(cur, parent);
+					else
+						_right_tree(cur, parent);
+					return true;
+				}
 			}
 		}
 		return false;
@@ -160,6 +199,111 @@ public:
 	}
 private:
 	Node* _root = nullptr;
+	bool e_root(Node* root)
+	{
+		if (root->_left == nullptr && root->_right == nullptr)
+		{
+			delete root;
+			root = nullptr;
+		}
+		else if (root->_left != nullptr)
+		{
+			root->_key = root->_left->_key;
+			_left_tree(root->_left, root);
+			return true;
+		}
+		else
+		{
+			Node* tmp = root->_right;
+			Node* parent = tmp;
+			while (true)
+			{
+				if (tmp->_left != nullptr)
+				{
+					root->_key = tmp->_key;
+					_left_tree(tmp, parent);
+					return true;
+				}
+				else
+				{
+					if (tmp->_right != nullptr)
+					{
+						parent = tmp;
+						tmp = tmp->_right;
+					}
+					else
+					{
+						root->_key = tmp->_key;
+						_leaf(tmp, parent);
+						return true;
+					}
+
+				}
+			}
+
+		}
+	}
+	bool _leaf(Node* cur,Node* parent)
+	{
+		if (cur == parent->_left)
+		{
+			parent->_left = nullptr;
+			delete cur;
+			return true;
+		}
+		else if (cur == parent->_right)
+		{
+			parent->_right = nullptr;
+			delete cur;
+			return true;
+		}
+		else
+			return false;
+	}
+	bool _left_tree(Node* cur, Node* parent)
+	{
+		if (cur->_left != nullptr)
+		{
+			if (cur == parent->_left)
+			{
+				parent->_left = cur->_left;
+				delete cur;
+			}
+			else if (cur == parent->_right)
+			{
+				parent->_right = cur->_right;
+				delete cur;
+			}
+		}
+		else
+			return false;
+	}
+	bool _right_tree(Node* cur, Node* parent)
+	{
+		Node* tmp = cur->_right;
+		while (true)
+		{
+			if (tmp->_left != nullptr)
+			{
+				_left_tree(tmp, parent);
+				return true;
+			}
+			else
+			{
+				if(tmp->_right != nullptr)
+				{
+					parent = tmp;
+					tmp = tmp->_right;
+				}
+				else
+				{
+					_leaf(tmp, parent);
+					return true;
+				}
+						
+			}
+		}
+	}
 };
 typedef Binary_Search_Tree<int> BST;
 int main(void)
