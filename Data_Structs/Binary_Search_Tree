@@ -166,7 +166,7 @@ public:
 			{
 				if (parent == cur)
 				{
-					e_root(cur);
+					_notleaf(cur);
 					return true;
 				}
 				else if (cur->_left == nullptr && cur->_right == nullptr)
@@ -176,9 +176,7 @@ public:
 				}
 				else
 				{
-					if (cur->_left != nullptr)_left_tree(cur, parent);
-					else
-						_right_tree(cur, parent);
+					_notleaf(cur);
 					return true;
 				}
 			}
@@ -188,59 +186,35 @@ public:
 	void _inorder(Node* root)
 	{
 		if (root == nullptr)return;
-		_inorder(root->_left);
+		if(root->_left != nullptr && root->_right != nullptr)_inorder(root->_left);
 		cout << root->_key << " ";
-		_inorder(root->_right);
+		if(root->_left != nullptr && root->_right != nullptr)_inorder(root->_right);
 	}
 	void inorder()
 	{
+		if (_root == nullptr)cout << "NULL";
 		_inorder(_root);
 		cout << endl;
 	}
 private:
 	Node* _root = nullptr;
-	bool e_root(Node* root)
+	Node* _findnode(Node* cur)
 	{
-		if (root->_left == nullptr && root->_right == nullptr)
-		{
-			delete root;
-			root = nullptr;
-		}
-		else if (root->_left != nullptr)
-		{
-			root->_key = root->_left->_key;
-			_left_tree(root->_left, root);
-			return true;
-		}
+		if (cur == nullptr)exit(-1);
+		Node* parent = cur;
+		if (cur->_left != nullptr)return cur;
 		else
 		{
-			Node* tmp = root->_right;
-			Node* parent = tmp;
-			while (true)
+			while (cur)
 			{
-				if (tmp->_left != nullptr)
+				if (cur->_left == nullptr && cur->_right != nullptr)
 				{
-					root->_key = tmp->_key;
-					_left_tree(tmp, parent);
-					return true;
+					parent = cur;
+					cur = cur->_right;
 				}
 				else
-				{
-					if (tmp->_right != nullptr)
-					{
-						parent = tmp;
-						tmp = tmp->_right;
-					}
-					else
-					{
-						root->_key = tmp->_key;
-						_leaf(tmp, parent);
-						return true;
-					}
-
-				}
+					return parent;
 			}
-
 		}
 	}
 	bool _leaf(Node* cur,Node* parent)
@@ -249,61 +223,91 @@ private:
 		{
 			parent->_left = nullptr;
 			delete cur;
+			cur = nullptr;
 			return true;
 		}
 		else if (cur == parent->_right)
 		{
 			parent->_right = nullptr;
 			delete cur;
+			cur = nullptr;
 			return true;
 		}
 		else
 			return false;
 	}
-	bool _left_tree(Node* cur, Node* parent)
+	bool _notleaf(Node* cur)
 	{
-		if (cur->_left != nullptr)
+		if (cur == nullptr)return false;
+		Node* parent = nullptr;
+		Node* inheritor = nullptr;
+		parent = _findnode(cur);
+		if (parent->_left == nullptr && parent->_right == nullptr)
 		{
-			if (cur == parent->_left)
-			{
-				parent->_left = cur->_left;
-				delete cur;
-			}
-			else if (cur == parent->_right)
-			{
-				parent->_right = cur->_right;
-				delete cur;
-			}
+			delete _root;
+			_root = nullptr;
+			return true;
 		}
+		if (parent->_left != nullptr)inheritor = parent->_left;
 		else
-			return false;
-	}
-	bool _right_tree(Node* cur, Node* parent)
-	{
-		Node* tmp = cur->_right;
-		while (true)
+			inheritor = parent->_right;
+		cur->_key = inheritor->_key;
+		while (inheritor->_left != nullptr && inheritor->_right != nullptr)
 		{
-			if (tmp->_left != nullptr)
-			{
-				_left_tree(tmp, parent);
-				return true;
-			}
+			cur = inheritor;
+			parent = _findnode(inheritor);
+			if (parent->_left != nullptr)inheritor = parent->_left;
 			else
-			{
-				if(tmp->_right != nullptr)
-				{
-					parent = tmp;
-					tmp = tmp->_right;
-				}
-				else
-				{
-					_leaf(tmp, parent);
-					return true;
-				}
-						
-			}
+				inheritor = parent->_right;
+			cur->_key = inheritor->_key;
 		}
+		_leaf(inheritor, parent);
+		return true;
 	}
+	//bool _left_tree(Node* cur, Node* parent)//incorret
+	//{
+	//	if (cur->_left != nullptr)
+	//	{
+	//		if (cur == parent->_left)
+	//		{
+	//			parent->_left = cur->_left;
+	//			delete cur;
+	//		}
+	//		else if (cur == parent->_right)
+	//		{
+	//			parent->_right = cur->_right;
+	//			delete cur;
+	//		}
+	//	}
+	//	else
+	//		return false;
+	//}
+	//bool _right_tree(Node* cur, Node* parent)
+	//{
+	//	Node* tmp = cur->_right;
+	//	while (true)
+	//	{
+	//		if (tmp->_left != nullptr)
+	//		{
+	//			_left_tree(tmp, parent);
+	//			return true;
+	//		}
+	//		else
+	//		{
+	//			if(tmp->_right != nullptr)
+	//			{
+	//				parent = tmp;
+	//				tmp = tmp->_right;
+	//			}
+	//			else
+	//			{
+	//				_leaf(tmp, parent);
+	//				return true;
+	//			}
+	//					
+	//		}
+	//	}
+	//}
 };
 typedef Binary_Search_Tree<int> BST;
 int main(void)
@@ -320,6 +324,9 @@ int main(void)
 	{
 		B.erase(e);
 	}
+	B.inorder();
+	return 0;
+}
 	B.inorder();
 	return 0;
 }
