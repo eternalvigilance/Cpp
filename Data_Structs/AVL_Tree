@@ -1,0 +1,154 @@
+#include<iostream>
+template<class K>
+struct Node
+{
+	Node* _left;
+	Node* _right;
+	Node* _parent;
+	K _key;
+	int _bf;
+	Node(const K& key)
+		:_key(key),_left(nullptr),_right(nullptr),_parent(nullptr),_bf(0)
+	{}
+};
+template<class K>
+class AVL_Tree
+{
+	typedef Node<K> Node;
+public:
+	bool insert(const K& key)
+	{
+		if (_root == nullptr)
+		{
+			_root = new Node(key);
+			return true;
+		}
+		Node* cur = _root;
+		Node* parent = cur;
+		while (cur)
+		{
+			if (key > cur->_key)
+			{
+				parent = cur;
+				cur = cur->_right;
+			}
+			else if (key < cur->_key)
+			{
+				parent = cur;
+				cur = cur->_left;
+			}
+			else
+				return false;
+		}
+		cur = new Node(key);
+		cur->_parent = parent;
+		if (key > cur->_parent->_key)cur->_parent->_right = cur;
+		else
+			cur->_parent->_left = cur;
+		update_bf(cur);
+		return true;
+	}
+	void innorder()
+	{
+		if (_root == nullptr)std::cout << "NULL" << std::endl;
+		else
+		{
+			_inorder(_root);
+			std::cout << std::endl;
+		}
+	}
+private:
+	Node* _root = nullptr;
+	void _inorder(Node* node)
+	{
+		if (node == nullptr)return;
+		if(node->_left != nullptr)_inorder(node->_left);
+		std::cout << node->_key << " ";
+		if (node->_right != nullptr)_inorder(node->_right);
+	}
+	bool rotate(Node* cur)
+	{
+		if (cur->_left == nullptr && cur->_right->_left == nullptr)
+		{
+			K tmp = cur->_key;
+			cur->_bf = 0;
+			cur->_key = cur->_right->_key;
+			cur->_right->_key = cur->_right->_right->_key;
+			Node* left = new Node(tmp);
+			cur->_left = left;
+			left->_parent = cur;
+			delete cur->_right->_right;
+			cur->_right->_right = nullptr;
+			return true;
+		}
+		else if (cur->_left == nullptr && cur->_right->_right == nullptr)
+		{
+			K tmp = cur->_key;
+			cur->_bf = 0;
+			cur->_key = cur->_right->_left->_key;
+			Node* left = new Node(tmp);
+			cur->_left = left;
+			left->_parent = cur;
+			delete cur->_right->_left;
+			cur->_right->_left = nullptr;
+			return true;
+
+		}
+		else if (cur->_right == nullptr && cur->_left->_right == nullptr)
+		{
+			K tmp = cur->_key;
+			cur->_bf = 0;
+			cur->_key = cur->_left->_key;
+			Node* right = new Node(tmp);
+			cur->_right = right;
+			right->_parent = cur;
+			cur->_left->_key = cur->_left->_left->_key;
+			delete cur->_left->_left;
+			cur->_left->_left = nullptr;
+			return true;
+		}
+		else if(cur->_right == nullptr && cur->_left->_left == nullptr)
+		{
+			K tmp = cur->_key;
+			cur->_bf = 0;
+			cur->_key = cur->_left->_right->_key;
+			Node* right = new Node(tmp);
+			cur->_right = right;
+			right->_parent = cur;
+			delete cur->_left->_right;
+			cur->_left->_right = nullptr;
+			return true;
+		}
+	}
+	bool update_bf(Node* cur)
+	{
+		while (cur->_parent)
+		{
+			if (cur == cur->_parent->_right)cur->_parent->_bf++;
+			else
+				cur->_parent->_bf--;
+			if (cur->_parent->_bf == 0)break;
+			else if (cur->_parent->_bf == 1 || cur->_parent->_bf == -1)cur = cur->_parent;
+			else if (cur->_parent->_bf == 2 || cur->_parent->_bf == -2)
+			{
+				rotate(cur->_parent);
+				break;
+			}
+			else
+				exit(-1);
+		}
+		return true;
+	}
+};
+int main()
+{
+	typedef AVL_Tree<int> Tree;
+	int a[] = { 5,2,1,4,3 };
+	Tree t;
+	for (auto v : a)
+	{
+		t.insert(v);
+	}
+	t.innorder();
+	return 0;
+}
