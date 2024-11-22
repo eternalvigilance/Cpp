@@ -186,15 +186,18 @@ public:
 	void _inorder(Node* root)
 	{
 		if (root == nullptr)return;
-		if(root->_left != nullptr && root->_right != nullptr)_inorder(root->_left);
+		if(root->_left != nullptr)_inorder(root->_left);
 		cout << root->_key << " ";
-		if(root->_left != nullptr && root->_right != nullptr)_inorder(root->_right);
+		if(root->_right != nullptr)_inorder(root->_right);
 	}
 	void inorder()
 	{
 		if (_root == nullptr)cout << "NULL";
-		_inorder(_root);
-		cout << endl;
+		else
+		{
+			_inorder(_root);
+			cout << endl;
+		}
 	}
 private:
 	Node* _root = nullptr;
@@ -324,9 +327,6 @@ int main(void)
 	{
 		B.erase(e);
 	}
-	B.inorder();
-	return 0;
-}
 	B.inorder();
 	return 0;
 }
