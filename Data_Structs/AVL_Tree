@@ -57,8 +57,95 @@ public:
 			std::cout << std::endl;
 		}
 	}
+	Node* find(const K& key)
+	{
+		if (_root == nullptr)
+		{
+			std::cout << "NULL" << std::endl;
+			return nullptr;
+		}
+		Node* cur = _root;
+		while (cur)
+		{
+			if (key > cur->_key && cur->_right != nullptr)cur = cur->_right;
+			else if (key < cur->_key && cur->_left != nullptr)cur = cur->_left;
+			else
+			{
+				std::cout << cur->_key << std::endl;
+				return cur;;
+			}
+		}
+		return nullptr;
+	}
+	bool erase(const K& key)
+	{
+		Node* node = find(key);
+		if (node == _root)
+		{
+
+		}
+		else if (node)
+		{
+			if (node->_left == nullptr && node->_right == nullptr)
+			{
+				_erase(node);
+				return true;
+			}
+			else
+			{
+				Node* leaf = _inherit(node);
+				 
+			}
+		}
+		else
+		return false;
+	}
 private:
 	Node* _root = nullptr;
+	Node* _inherit(Node& node)
+	{
+
+	}
+	bool _erase(Node* leaf)
+	{
+		if (leaf != nullptr)
+		{
+			if (leaf == leaf->_parent->_leaft)
+			{
+				leaf->_parent->_bf++;
+				Node* parent = leaf->_parent;
+				leaf->_parent->_left = nullptr;
+				delete leaf;
+				leaf = nullptr;
+				while (parent->_parent)
+				{
+					if (parent->_bf == 1 || parent->_bf == -1)parent = parent->_parent;
+					else if (parent->_bf == 0)break;
+					else if (parent->_bf == 2 || parent->_bf == -2)rotate(parent);
+				}
+				return true;
+			}
+			else if (leaf == leaf->_parent->_right)
+			{
+				leaf->_parent->_bf--;
+				Node* parent = leaf->_parent;
+				leaf->_parent->_right = nullptr;
+				delete leaf;
+				leaf = nullptr;
+				while (parent->_parent)
+				{
+					if (parent->_bf == 1 || parent->_bf == -1)parent = parent->_parent;
+					else if (parent->_bf == 0)break;
+					else if (parent->_bf == 2 || parent->_bf == -2)rotate(parent);
+				}
+				return true;
+			}
+			else
+				return false;
+		}
+		else
+			return false;
+	}
 	void _inorder(Node* node)
 	{
 		if (node == nullptr)return;
@@ -150,5 +237,6 @@ int main()
 		t.insert(v);
 	}
 	t.innorder();
+	//t.find(0);
 	return 0;
 }
