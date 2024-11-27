@@ -1,4 +1,5 @@
 #include<iostream>
+#include<cassert>
 template<class K>
 struct Node
 {
@@ -71,7 +72,7 @@ public:
 			else if (key < cur->_key && cur->_left != nullptr)cur = cur->_left;
 			else
 			{
-				std::cout << cur->_key << std::endl;
+				//std::cout << cur->_key << std::endl;
 				return cur;;
 			}
 		}
@@ -80,9 +81,27 @@ public:
 	bool erase(const K& key)
 	{
 		Node* node = find(key);
+		assert(_root != nullptr);
 		if (node == _root)
 		{
-
+			if (node->_left == nullptr && node->_right == nullptr)
+			{
+				_root = nullptr;
+				delete node;
+				node = nullptr;
+				return true;
+			}
+			else
+			{
+				Node* leaf = _inherit(node);
+				if (leaf != nullptr)
+				{
+					_erase(leaf);
+					return true;
+				}
+				else
+					return false;
+			}
 		}
 		else if (node)
 		{
@@ -94,6 +113,8 @@ public:
 			else
 			{
 				Node* leaf = _inherit(node);
+				_erase(leaf);
+				return true;
 				 
 			}
 		}
@@ -102,40 +123,76 @@ public:
 	}
 private:
 	Node* _root = nullptr;
-	Node* _inherit(Node& node)
+	Node* _inherit(Node* node)
 	{
-
+		Node* leaf = node;
+		if ((leaf->_bf == -1 || leaf->_bf == 0))
+		{
+			while (!(leaf->_left == nullptr && leaf->_right == nullptr))
+			{
+				leaf->_key = leaf->_left->_key;
+				leaf = leaf->_left;
+			}
+			return leaf;
+		}
+		else if (leaf->_bf == 1)
+		{
+			leaf = leaf->_right;
+			if (leaf->_left != nullptr)
+			{
+				while (!(leaf->_left == nullptr && leaf->_right == nullptr))
+				{
+					if(leaf->_left != nullptr)leaf = leaf->_left;
+					else
+					{
+						Node* tmp = _inherit(leaf);
+						return tmp;
+					}
+				}
+				node->_key = leaf->_key;
+				return leaf;
+			}
+			else
+			{
+				leaf->_key = leaf->_right->_key;
+				return leaf;
+			}
+		}
 	}
 	bool _erase(Node* leaf)
 	{
 		if (leaf != nullptr)
 		{
-			if (leaf == leaf->_parent->_leaft)
+			if (leaf == leaf->_parent->_left)
 			{
-				leaf->_parent->_bf++;
 				Node* parent = leaf->_parent;
 				leaf->_parent->_left = nullptr;
 				delete leaf;
 				leaf = nullptr;
 				while (parent->_parent)
 				{
-					if (parent->_bf == 1 || parent->_bf == -1)parent = parent->_parent;
-					else if (parent->_bf == 0)break;
+					if (parent = parent->_parent->_left)parent->_bf++;
+					else
+						parent->_bf--;
+					if (parent->_bf == 1 || parent->_bf == -1)break;
+					else if (parent->_bf == 0)parent = parent->_parent;
 					else if (parent->_bf == 2 || parent->_bf == -2)rotate(parent);
 				}
 				return true;
 			}
 			else if (leaf == leaf->_parent->_right)
 			{
-				leaf->_parent->_bf--;
 				Node* parent = leaf->_parent;
 				leaf->_parent->_right = nullptr;
 				delete leaf;
 				leaf = nullptr;
 				while (parent->_parent)
 				{
-					if (parent->_bf == 1 || parent->_bf == -1)parent = parent->_parent;
-					else if (parent->_bf == 0)break;
+					if (parent == parent->_parent->_right)parent->_bf--;
+					else
+						parent->_bf++;
+					if (parent->_bf == 1 || parent->_bf == -1)break;
+					else if (parent->_bf == 0)parent = parent->_parent;
 					else if (parent->_bf == 2 || parent->_bf == -2)rotate(parent);
 				}
 				return true;
@@ -238,5 +295,7 @@ int main()
 	}
 	t.innorder();
 	//t.find(0);
+	t.erase(2);
+	t.innorder();
 	return 0;
 }
