@@ -121,6 +121,10 @@ public:
 		else
 		return false;
 	}
+	bool IsBalance()
+	{
+
+	}
 private:
 	Node* _root = nullptr;
 	Node* _inherit(Node* node)
@@ -210,60 +214,72 @@ private:
 		std::cout << node->_key << " ";
 		if (node->_right != nullptr)_inorder(node->_right);
 	}
-	bool rotate(Node* cur)
+	bool RotateL()
 	{
-		if (cur->_left == nullptr && cur->_right->_left == nullptr)
-		{
-			K tmp = cur->_key;
-			cur->_bf = 0;
-			cur->_key = cur->_right->_key;
-			cur->_right->_key = cur->_right->_right->_key;
-			Node* left = new Node(tmp);
-			cur->_left = left;
-			left->_parent = cur;
-			delete cur->_right->_right;
-			cur->_right->_right = nullptr;
-			return true;
-		}
-		else if (cur->_left == nullptr && cur->_right->_right == nullptr)
-		{
-			K tmp = cur->_key;
-			cur->_bf = 0;
-			cur->_key = cur->_right->_left->_key;
-			Node* left = new Node(tmp);
-			cur->_left = left;
-			left->_parent = cur;
-			delete cur->_right->_left;
-			cur->_right->_left = nullptr;
-			return true;
-
-		}
-		else if (cur->_right == nullptr && cur->_left->_right == nullptr)
-		{
-			K tmp = cur->_key;
-			cur->_bf = 0;
-			cur->_key = cur->_left->_key;
-			Node* right = new Node(tmp);
-			cur->_right = right;
-			right->_parent = cur;
-			cur->_left->_key = cur->_left->_left->_key;
-			delete cur->_left->_left;
-			cur->_left->_left = nullptr;
-			return true;
-		}
-		else if(cur->_right == nullptr && cur->_left->_left == nullptr)
-		{
-			K tmp = cur->_key;
-			cur->_bf = 0;
-			cur->_key = cur->_left->_right->_key;
-			Node* right = new Node(tmp);
-			cur->_right = right;
-			right->_parent = cur;
-			delete cur->_left->_right;
-			cur->_left->_right = nullptr;
-			return true;
-		}
+		
 	}
+	bool RotateR()
+	{
+
+	}
+	bool RatateD()
+	{
+
+	}
+	//bool rotate(Node* cur)
+	//{
+	//	if (cur->_left == nullptr && cur->_right->_left == nullptr)
+	//	{
+	//		K tmp = cur->_key;
+	//		cur->_bf = 0;
+	//		cur->_key = cur->_right->_key;
+	//		cur->_right->_key = cur->_right->_right->_key;
+	//		Node* left = new Node(tmp);
+	//		cur->_left = left;
+	//		left->_parent = cur;
+	//		delete cur->_right->_right;
+	//		cur->_right->_right = nullptr;
+	//		return true;
+	//	}
+	//	else if (cur->_left == nullptr && cur->_right->_right == nullptr)
+	//	{
+	//		K tmp = cur->_key;
+	//		cur->_bf = 0;
+	//		cur->_key = cur->_right->_left->_key;
+	//		Node* left = new Node(tmp);
+	//		cur->_left = left;
+	//		left->_parent = cur;
+	//		delete cur->_right->_left;
+	//		cur->_right->_left = nullptr;
+	//		return true;
+
+	//	}
+	//	else if (cur->_right == nullptr && cur->_left->_right == nullptr)
+	//	{
+	//		K tmp = cur->_key;
+	//		cur->_bf = 0;
+	//		cur->_key = cur->_left->_key;
+	//		Node* right = new Node(tmp);
+	//		cur->_right = right;
+	//		right->_parent = cur;
+	//		cur->_left->_key = cur->_left->_left->_key;
+	//		delete cur->_left->_left;
+	//		cur->_left->_left = nullptr;
+	//		return true;
+	//	}
+	//	else if(cur->_right == nullptr && cur->_left->_left == nullptr)
+	//	{
+	//		K tmp = cur->_key;
+	//		cur->_bf = 0;
+	//		cur->_key = cur->_left->_right->_key;
+	//		Node* right = new Node(tmp);
+	//		cur->_right = right;
+	//		right->_parent = cur;
+	//		delete cur->_left->_right;
+	//		cur->_left->_right = nullptr;
+	//		return true;
+	//	}
+	//}
 	bool update_bf(Node* cur)
 	{
 		while (cur->_parent)
