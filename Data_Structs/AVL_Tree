@@ -214,17 +214,133 @@ private:
 		std::cout << node->_key << " ";
 		if (node->_right != nullptr)_inorder(node->_right);
 	}
-	bool RotateL()
+	void rotate(Node* parent)
 	{
-		
+		if (parent->_bf == 2 || parent->_bf == -2)
+		{
+			if (parent->_right != nullptr)
+			{
+				if (parent->_right->_bf == 1)RotateL(parent);
+				else if (parent->_right->_bf == -1)RotateRL(parent);
+			}
+			else
+			{
+				if (parent->_left->_bf == -1)RotateR(parent);
+				else if (parent->_left->_bf == 1)RotateLR(parent);
+			}
+		}
+		else
+			exit(-1);
 	}
-	bool RotateR()
+	void RotateL(Node* parent)
 	{
-
+		Node* sub = parent->_right;
+		Node* ppnode = parent->_parent;
+		// link parent and subnode's leftnode.
+		parent->_right = sub->_left;
+		if (sub->_left != nullptr)sub->_left->_parent = parent;
+		// link ppnode and sub.
+		if (ppnode != nullptr)
+		{
+			if (parent == ppnode->_left)ppnode->_left = sub;
+			else
+				ppnode->_right = sub;
+			sub->_parent = ppnode;
+		}
+		else
+		{
+			_root = sub;
+			_root->_parent = nullptr;
+		}
+		// link parent and subnode.
+		sub->_left = parent;
+		parent->_parent = sub;
 	}
-	bool RatateD()
+	void RotateR(Node* parent)
 	{
-
+		Node* sub = parent->_left;
+		Node* ppnode = parent->_parent;
+		// link the parent node and subnode's rightnode,
+		// and then parent's leaftnode is subnode's rightnode,
+		// and parent node is subnode pointing rightnode's parent
+		// if the node is not nullptr.
+		parent->_left = sub->_right;
+		if (sub->_right != nullptr)sub->_right->_parent = parent;
+		// link the node of parent node pointing parent and parent's subnode
+		if (ppnode != nullptr)
+		{
+			if (parent == ppnode->_left)ppnode->_left = sub;
+			else
+				ppnode->_right = sub;
+			sub->_parent = ppnode;
+		}
+		else
+		{
+			_root = sub;
+			_root->_parent = nullptr;
+		}
+		// link  the node named sub and parent,and sub is the parent's parent 
+		// and parent is sub's right node after the operation.
+		sub->_right = parent;
+		parent->_parent = sub;
+		sub->_bf = parent->_bf = 0;
+	}
+	void RotateLR(Node* parent)
+	{
+		Node* subl = parent->_left;
+		Node* sublr = subl->_right;
+		int bf = sublr->_bf;
+		RotateL(parent->_left);
+		RotateR(parent);
+		// update the balance factor
+		if (bf == -1)//the new node in sublr's left node
+		{
+			subl->_bf = 0;
+			parent->_bf = 1;
+			sublr->_bf = 0;
+		}
+		else if (bf == 1)// the new node in the sublr's right node
+		{
+			subl->_bf = 0;
+			parent->_bf = 1;
+			sublr->_bf = 0;
+		}
+		else if (bf == 0)
+		{
+			parent->_bf = 0;
+			subl->_bf = 0;
+			sublr->_bf = 0;
+		}
+		else
+			exit(-1);
+	}
+	void RotateRL(Node* parent)
+	{
+		Node* subr = parent->_right;
+		Node* subrl = subr->_left;
+		int bf = subrl->_bf;
+		RotateR(parent->_right);
+		RotateL(parent);
+		if (bf == -1)
+		{
+			subr->_bf = 1;
+			parent->_bf = 0;
+			subrl->_bf = 0;
+		}
+		else if (bf == 1)
+		{
+			subr->_bf = 0;
+			parent->_bf = -1;
+			subrl->_bf = 0;
+		}
+		else if (bf == 0)
+		{
+			parent->_bf = 0;
+			subr->_bf = 0;
+			subrl->_bf = 0;
+		}
+		else
+			exit(-1);
 	}
 	//bool rotate(Node* cur)
 	//{
@@ -311,7 +427,10 @@ int main()
 	}
 	t.innorder();
 	//t.find(0);
-	t.erase(2);
+	for (auto v : a)
+	{
+		t.erase(v);
+	}
 	t.innorder();
 	return 0;
 }
