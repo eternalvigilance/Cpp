@@ -255,6 +255,7 @@ private:
 		// link parent and subnode.
 		sub->_left = parent;
 		parent->_parent = sub;
+		sub->_bf = parent->_bf = 0;
 	}
 	void RotateR(Node* parent)
 	{
