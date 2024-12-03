@@ -1,0 +1,79 @@
+#include<iostream>
+using std::cout;
+using std::pair;
+using std::make_pair;
+enum Color
+{
+	Red,
+	Black
+};
+template<class K,class V>
+struct Node
+{
+	pair<K, V> _key;
+	Node<K,V>* _left;
+	Node<K,V>* _right;
+	Node<K,V>* _parent;
+	Color color;
+	Node(const pair<K,V>& kv)
+		:_key(kv),_left(nullptr),_right(nullptr),_parent(nullptr),color(Red)
+	{}
+};
+template<class K,class V>
+class RBTree
+{
+	typedef Node<K, V> Node;
+	typedef pair<K, V> kv;
+public:
+	bool insert(const kv& key)
+	{
+		if (_root == nullptr)
+		{
+			_root = new Node(key);
+			_root->color = Black;
+			return true;
+		}
+
+		Node* cur = _root;
+		Node* parent = cur;
+		while (cur)
+		{
+			if (key.first > cur->_key.first)
+			{
+				parent = cur;
+				cur = cur->_right;
+			}
+			else if (key.first < cur->_key.first)
+			{
+					parent = cur;
+					cur = cur->_left;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		cur = new Node(key);
+		cur->_parent = parent;
+		if (parent->_key.first > key.first)parent->_right = cur;
+		else
+			parent->_left = cur;
+		if(parent->color == Red)_update_color(cur);
+		return true;
+	}
+private:
+	Node* _root = nullptr;
+	void _update_color(Node* cur)
+	{
+		while (cur->_parent && cur->_parent->color == Red)
+		{
+
+		}
+	}
+};
+int main(void)
+{
+	RBTree<int,int> r;
+	r.insert(make_pair(3, 3));
+	return 0;
+}
