@@ -14,9 +14,9 @@ struct Node
 	Node<K,V>* _left;
 	Node<K,V>* _right;
 	Node<K,V>* _parent;
-	Color color;
+	Color _color;
 	Node(const pair<K,V>& kv)
-		:_key(kv),_left(nullptr),_right(nullptr),_parent(nullptr),color(Red)
+		:_key(kv),_left(nullptr),_right(nullptr),_parent(nullptr),_color(Red)
 	{}
 };
 template<class K,class V>
@@ -30,7 +30,7 @@ public:
 		if (_root == nullptr)
 		{
 			_root = new Node(key);
-			_root->color = Black;
+			_root->_color = Black;
 			return true;
 		}
 
@@ -58,22 +58,129 @@ public:
 		if (parent->_key.first > key.first)parent->_right = cur;
 		else
 			parent->_left = cur;
-		if(parent->color == Red)_update_color(cur);
+		if(parent->_color == Red)_update_color(cur);
 		return true;
 	}
 private:
 	Node* _root = nullptr;
 	void _update_color(Node* cur)
 	{
-		while (cur->_parent && cur->_parent->color == Red)
-		{
 
+		while (cur->_parent && cur->_parent->_color == Red)
+		{
+			Node* g = cur->_parent->_parent;
+			Node* p = cur->_parent;
+			if (p == g->_left)
+			{
+				if (cur = p->_left)//Single Rotation
+				{
+					if (p->_right != nullptr)
+					{
+						if (p->_right->_color == Red)
+						{
+							p->_color = Black;
+							p->_right->_color = Black;
+							g->_color = Red;
+							if (g == _root)
+							{
+								_root = p;
+							}
+						}
+						else if (p->_right->_color = Black)
+							//in this case,the current node is not the inserted new node ,which original color is black
+						{
+							RotateR(g);
+							g->_color = Red;
+							p->_color = Black;
+							if (g == _root)
+							{
+								_root = p;
+							}
+						}
+						else
+							exit(-1);
+					}
+					else
+					{
+						RotateR(g);
+						p->_color = Black;
+						g->_color = Red;
+						if (g == _root)
+						{
+							_root = p;
+						}
+					}
+				}
+				else if (cur = p->_right) // Double Rotation
+				{
+					if (p->_right != nullptr)
+					{
+						if (p->_right->_color == Red)
+						{
+							p->_color = Black;
+							p->_right->_color = Red;
+							g->_color = Red;
+							if (g == _root)
+							{
+								_root = p;
+							}
+						}
+						else if (p->_right->_color == Black)
+						{
+							RoateLR(g);
+							cur->_color = Black;
+							g->_color = Red;
+							if (g == _root)
+							{
+								_root = cur;
+							}
+						}
+						else
+							exit(-1);
+					}
+					else
+					{
+						RotateLR(g);
+						cur->_color = Black;
+						g->_color = Red;
+						if (g == _root)
+						{
+							_root = cur;
+						}
+					}
+				}
+			}
+			else
+			// The parent is the grandparent's right
+			{
+
+			}
 		}
 	}
+	void RotateR(Node* parent)
+	{
+
+	}
+	void RotateL(Node* parent)
+	{
+
+	}
+	void RoateRL(Node* parent)
+	{
+
+	}
+	void RotateLR(Node* parent)
+	{
+
+	}
 };
+void test1()
+{
+	RBTree<int, int> r;
+	r.insert(make_pair(3, 3));
+}
 int main(void)
 {
-	RBTree<int,int> r;
-	r.insert(make_pair(3, 3));
+	test1();
 	return 0;
 }
