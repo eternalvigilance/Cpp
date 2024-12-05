@@ -86,7 +86,7 @@ private:
 								_root = p;
 							}
 						}
-						else if (p->_right->_color = Black)
+						else
 							//in this case,the current node is not the inserted new node ,which original color is black
 						{
 							RotateR(g);
@@ -97,8 +97,6 @@ private:
 								_root = p;
 							}
 						}
-						else
-							exit(-1);
 					}
 					else
 					{
@@ -118,14 +116,14 @@ private:
 						if (p->_right->_color == Red)
 						{
 							p->_color = Black;
-							p->_right->_color = Red;
+							p->_right->_color = Black;
 							g->_color = Red;
 							if (g == _root)
 							{
 								_root = p;
 							}
 						}
-						else if (p->_right->_color == Black)
+						else
 						{
 							RoateLR(g);
 							cur->_color = Black;
@@ -135,8 +133,6 @@ private:
 								_root = cur;
 							}
 						}
-						else
-							exit(-1);
 					}
 					else
 					{
@@ -153,6 +149,78 @@ private:
 			else
 			// The parent is the grandparent's right
 			{
+				if (cur == p->_right)//Single
+				{
+					if (g->_left != nullptr)
+					{
+						if (g->_left->_color == Red)
+						{
+								g->_color = Red;
+								g->_left->_color = Black;
+								p->_color = Black;
+								if (g == _root)
+								{
+									g->_color = Black;
+								}
+								else
+								cur = g; 
+						}
+						else
+						{ 
+							RotateL(g);
+							p->_color = Black;
+							p->_left->_color = Red;
+							cur->_color = Black;
+							if (g == _root)
+							{
+								_root = p;
+							}
+							else
+							{
+								cur = g;
+							}
+						}
+					}
+					else
+					{
+						RotateL(g);
+						p->_color = Black;
+						g->_color = Red;
+						if (g == _root)
+						{
+							_root = p;
+						}
+						else
+						{
+							cur = g;
+						}
+					}
+				}
+				else//Double
+				{
+					if (p->_right)
+					{
+						if (p->_right->_color == Red)
+						{
+							if (g == _root)
+							{
+
+							}
+							else
+							{
+
+							}
+						}
+						else
+						{
+
+						}
+					}
+					else
+					{
+
+					}
+				}
 
 			}
 		}
