@@ -157,7 +157,7 @@ private:
 			{
 				if (cur == p->_right)//Single
 				{
-					if (g->_left != nullptr)
+					if (g->_left)
 					{
 						if (g->_left->_color == Red)
 						{
@@ -172,9 +172,8 @@ private:
 						{ 
 							RotateL(g);
 							p->_color = Black;
-							g->_color = Black;
+							g->_color = Red;
 							if (g == _root)_root = p;
-
 							else
 								cur = g;
 
