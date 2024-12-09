@@ -27,7 +27,7 @@ class RBTree
 public:
 	bool insert(const kv& key)
 	{
-		if (_root == nullptr)
+ 		if (_root == nullptr)
 		{
 			_root = new Node(key);
 			_root->_color = Black;
@@ -55,17 +55,29 @@ public:
 		}
 		cur = new Node(key);
 		cur->_parent = parent;
-		if (parent->_key.first > key.first)parent->_right = cur;
+		if (parent->_key.first > key.first)parent->_left = cur;
 		else
-			parent->_left = cur;
+			parent->_right = cur;
 		if(parent->_color == Red)_update_color(cur);
 		return true;
 	}
+	void inorder()
+	{
+		if (_root == nullptr)cout << "NULL" << std::endl;
+		else
+			_inorder(_root);
+		cout << std::endl;
+	}
 private:
 	Node* _root = nullptr;
+	void _inorder(Node* cur)
+	{
+		if (cur->_left)_inorder(cur->_left);
+		cout << cur->_key.first << ' ';
+		if (cur->_right)_inorder(cur->_right);
+	}
 	void _update_color(Node* cur)
 	{
-
 		while (cur->_parent && cur->_parent->_color == Red)
 		{
 			Node* g = cur->_parent->_parent;
@@ -74,17 +86,16 @@ private:
 			{
 				if (cur = p->_left)//Single Rotation
 				{
-					if (p->_right != nullptr)
+					if (g->_right)
 					{
-						if (p->_right->_color == Red)
+						if (g->_right->_color == Red)
 						{
 							p->_color = Black;
-							p->_right->_color = Black;
+							g->_right->_color = Black;
 							g->_color = Red;
-							if (g == _root)
-							{
-								_root = p;
-							}
+							if (g == _root)p->_color = Black;
+							else
+								cur = g;
 						}
 						else
 							//in this case,the current node is not the inserted new node ,which original color is black
@@ -92,10 +103,9 @@ private:
 							RotateR(g);
 							g->_color = Red;
 							p->_color = Black;
-							if (g == _root)
-							{
-								_root = p;
-							}
+							if (g == _root)_root = p;
+							else
+								cur = g;
 						}
 					}
 					else
@@ -103,35 +113,32 @@ private:
 						RotateR(g);
 						p->_color = Black;
 						g->_color = Red;
-						if (g == _root)
-						{
-							_root = p;
-						}
+						if (g == _root)_root = p;
+						else
+							cur = g;
 					}
 				}
 				else if (cur = p->_right) // Double Rotation
 				{
-					if (p->_right != nullptr)
+					if (p->_right)
 					{
 						if (p->_right->_color == Red)
 						{
 							p->_color = Black;
 							p->_right->_color = Black;
 							g->_color = Red;
-							if (g == _root)
-							{
-								_root = p;
-							}
+							if (g == _root)p->_color = Black;
+							else
+								cur = g;
 						}
 						else
 						{
-							RoateLR(g);
+							RotateLR(g);
 							cur->_color = Black;
 							g->_color = Red;
-							if (g == _root)
-							{
-								_root = cur;
-							}
+							if (g == _root)_root = cur;		
+							else
+								cur = g;
 						}
 					}
 					else
@@ -139,10 +146,9 @@ private:
 						RotateLR(g);
 						cur->_color = Black;
 						g->_color = Red;
-						if (g == _root)
-						{
-							_root = cur;
-						}
+						if (g == _root)_root = cur;
+						else
+							cur = g;
 					}
 				}
 			}
@@ -158,10 +164,7 @@ private:
 								g->_color = Red;
 								g->_left->_color = Black;
 								p->_color = Black;
-								if (g == _root)
-								{
-									g->_color = Black;
-								}
+								if (g == _root)g->_color = Black;
 								else
 								cur = g; 
 						}
@@ -169,16 +172,12 @@ private:
 						{ 
 							RotateL(g);
 							p->_color = Black;
-							p->_left->_color = Red;
-							cur->_color = Black;
-							if (g == _root)
-							{
-								_root = p;
-							}
+							g->_color = Black;
+							if (g == _root)_root = p;
+
 							else
-							{
 								cur = g;
-							}
+
 						}
 					}
 					else
@@ -186,39 +185,42 @@ private:
 						RotateL(g);
 						p->_color = Black;
 						g->_color = Red;
-						if (g == _root)
-						{
-							_root = p;
-						}
+						if (g == _root)_root = p;						
 						else
-						{
 							cur = g;
-						}
 					}
 				}
 				else//Double
 				{
-					if (p->_right)
+					if (g->_left)
 					{
-						if (p->_right->_color == Red)
+						if (g->_left->_color == Red)
 						{
-							if (g == _root)
-							{
-
-							}
+							g->_color = Red;
+							p->_color = Black;
+							g->_left->_color = Black;
+							if (g == _root)g->_color = Black;
 							else
-							{
-
-							}
+								cur = g;
 						}
 						else
 						{
-
+							RotateRL(g);
+							cur->_color = Black;
+							g->_color = Red;
+							if (_root = g)_root = cur;
+							else
+								cur = g;
 						}
 					}
 					else
 					{
-
+						RotateRL(g);
+						cur->_color = Black;
+						g->_color = Red;
+						if (_root = g)_root = cur;
+						else
+							cur = g;
 					}
 				}
 
@@ -227,25 +229,64 @@ private:
 	}
 	void RotateR(Node* parent)
 	{
-
+		Node* cur = parent->_left;
+		parent->_left = cur->_right;
+		cur->_right = parent;
+		if (parent != _root)
+		{
+			cur->_parent = parent->_parent;
+			if (parent == parent->_parent->_left)parent->_parent->_left = cur;
+			else
+				parent->_parent->_right = cur;
+			parent->_parent = cur;
+		}
+		else
+		{
+			cur->_parent = nullptr;
+			parent->_parent = cur;
+		}
 	}
 	void RotateL(Node* parent)
 	{
-
+		Node* cur = parent->_right;
+		parent->_right = cur->_left;
+		cur->_left = parent;
+		if (parent != _root)
+		{
+			cur->_parent = parent->_parent;
+			if (parent == parent->_parent->_left)parent->_parent->_left = cur;
+			else
+				parent->_parent->_right = cur;
+			parent->_parent = cur;
+		}
+		else
+		{
+			cur->_parent = nullptr;
+			parent->_parent = cur;
+		}
 	}
-	void RoateRL(Node* parent)
+	void RotateRL(Node* parent)
 	{
-
+		Node* cur = parent->_right;
+		RotateR(cur);
+		RotateL(parent);
 	}
 	void RotateLR(Node* parent)
 	{
-
+		Node* cur = parent->_left;
+		RotateL(cur);
+		RotateR(parent);
 	}
 };
 void test1()
 {
 	RBTree<int, int> r;
 	r.insert(make_pair(3, 3));
+	r.insert(make_pair(4, 3));
+	r.insert(make_pair(2, 3));
+	r.insert(make_pair(1, 3));
+	r.insert(make_pair(0, 3));
+	r.inorder();
 }
 int main(void)
 {
